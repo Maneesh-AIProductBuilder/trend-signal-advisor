@@ -1,0 +1,72 @@
+{
+  "keyword": "mukaish embroidery kurti",
+  "analysed_at": "10 Jun 2026 18:13",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 0/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "mukaish embroidery kurti",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 18:13",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate catalog presence",
+    "evidence": "10 listings · 0 launch signals · 2 discount signals",
+    "market_health": "moderate",
+    "catalog_count": 10,
+    "discount_hits": 2,
+    "fetched_at": "10 Jun 2026 18:13",
+    "from_cache": false
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "weak",
+    "badge_class": "badge-down",
+    "badge_text": "↓ Weak",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 18:13"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Some coverage",
+    "evidence": "1 articles in past 2 months · 1 fashion-relevant signals",
+    "article_count": 1,
+    "top_headlines": [
+      "Radhika Merchant, Shloka Mehta wow in traditional Indian wear to visit Siddhivinayak temple for Mukesh Ambani's birthday | Fashion Trends"
+    ],
+    "fetched_at": "10 Jun 2026 18:13",
+    "from_cache": false
+  },
+  "weighted_score": 1.625,
+  "demand_score": 1.25,
+  "buzz_score": 0.375,
+  "bet": "Small trial only — high uncertainty",
+  "bet_class": "small-trial",
+  "bet_override": null,
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Mukaish embroidery adds perceived value; ₹699–₹1,199 positioning is standard for embellished kurtis in this segment.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Mukaish (zari/metallic thread) adds weight and heat retention; suitable for winter/festive but challenging in summer across Tier 2–3 markets.",
+      "occasion_fit": "festive, ethnic, wedding-adjacent, temple visits, family gatherings",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Mukaish embroidery aligns with traditional Indian aesthetic and modesty norms; celebrity visibility (Radhika Merchant, Shloka Mehta) reinforces cultural legitimacy.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Meesho shows only 10 listings with no new launches; suggests either niche demand or oversupply; value-fashion customers often prefer simpler prints/weaves over labor-intensive embroidery."
+    },
+    "convergence_summary": "Mukaish kurtis show weak-to-flat organic search demand, modest marketplace presence, and only celebrity editorial lift—signals suggest limited mainstream volume potential despite cultural fit.",
+    "signal_agreement": "Conflicting: buzz (celebrity, editorial) suggests trend credibility, but demand signals (zero Google Trends momentum, flat marketplace, no launches) indicate poor conversion velocity.",
+    "disagreement_note": "Search Meesho and Myntra transaction data (sales volume, return rate, inventory turnover) for mukaish kurtis specifically. Check if the 10 listings are stagnant (old inventory) or actively selling. Verify if celebrity mentions drive actual Tier 2–3 traffic or only Tier 1 aspirational interest.",
+    "bet_reasoning": "Google Trends flat at 0/100 and no recent marketplace launches strongly outweigh a single celebrity sighting; this is editorial momentum without demand pull. The 10 existing Meesho listings with 2 discount signals suggest sellers are clearing stock, not restocking—a red flag for value fashion where inventory health matters more than influencer mentions.",
+    "skepticism_flag": "Radhika Merchant/Shloka Mehta temple visit coverage may skew perception toward premium/bridal mukaish (₹5K+) rather than value-fashion versions (₹399–₹1,499), making the news signal misleading for your price point.",
+    "error": false
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "keyword": "angrakha kurti",
+  "analysed_at": "10 Jun 2026 18:13",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 18/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "angrakha kurti",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 18:12",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate catalog presence",
+    "evidence": "10 listings · 0 launch signals · 1 discount signals",
+    "market_health": "moderate",
+    "catalog_count": 10,
+    "discount_hits": 1,
+    "fetched_at": "10 Jun 2026 18:12",
+    "from_cache": false
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 18:12"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-na",
+    "badge_text": "— No recent news",
+    "evidence": "0 articles in past 2 months · 0 fashion-relevant signals",
+    "article_count": 0,
+    "top_headlines": [],
+    "fetched_at": "10 Jun 2026 18:12",
+    "from_cache": false
+  },
+  "weighted_score": 1.5,
+  "demand_score": 1.25,
+  "buzz_score": 0.25,
+  "bet": "Small trial only — high uncertainty",
+  "bet_class": "small-trial",
+  "bet_override": null,
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Angrakha kurtis are traditionally constructed and can be mass-produced at ₹399–₹1,499 without quality compromise.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Angrakha's layered, overlapping front panel adds bulk in Indian heat; better suited to cooler months or festive wear than everyday summer.",
+      "occasion_fit": "ethnic, festive, casual, wedding",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Angrakha is a historically rooted, modest silhouette deeply aligned with Indian aesthetic norms and regional preferences.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Meesho/Vishal customers recognize ethnic kurtis, but angrakha's construction complexity and lower current marketplace traction (10 listings, no launches) suggest unproven bulk demand at this price tier."
+    },
+    "convergence_summary": "Google Trends shows real recent search interest (spike to 100/100), but marketplace listings remain thin, news coverage is absent, and social buzz is minimal—suggesting emerging awareness that has not yet consolidated into retail inventory or sales velocity.",
+    "signal_agreement": "Partial agreement: Demand (Google Trends) shows momentum; buzz (news, social) shows minimal editorial endorsement; marketplace supply (Myntra/Meesho) is cautious and unchanged.",
+    "disagreement_note": "Direct sales data (sell-through rate, repeat purchase rate, returns) from Myntra/Meesho for angrakha kurtis in the ₹399–₹1,499 band would clarify whether the Google Trends spike reflects genuine purchase intent or passing curiosity. SKU-level velocity would resolve this.",
+    "bet_reasoning": "The 18→100 Google Trends jump in 90 days is a genuine early-stage demand signal that warrants cautious inventory; however, the complete absence of news coverage, thin marketplace catalog (10 SKUs), and lack of brand launches suggest this is still pre-mass-market. Recommend a small, fast-turning test batch (200–400 units at ₹599–₹999) to capture upside without overcommitting to unvalidated demand.",
+    "skepticism_flag": "Google Trends spikes can reflect one-time seasonal searches (e.g., wedding season, festival prep) or search-engine gaming rather than sustained category demand—the zero-launch signal from major marketplaces is a concrete red flag that even aggregators are not seeing profitable velocity yet.",
+    "error": false
+  }
+}

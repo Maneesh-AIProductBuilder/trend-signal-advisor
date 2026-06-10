@@ -25,9 +25,11 @@ ANTHROPIC_KEY = get_api_key("ANTHROPIC_API_KEY")
 SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "sample_outputs")
 
 DEMO_FILE_MAP = {
-    "co-ord set":     "coord_set.json",
-    "Anarkali Kurti": "Anarkali_kurti.json",
-    "cape kurti":     "cape_kurti.json",
+    "sharara kurti set":        "sharara_kurti_set.json",
+    "schiffli cotton kurti":    "schiffli_cotton_kurti.json",
+    "angrakha kurti":           "angrakha_kurti.json",
+    "mukaish embroidery kurti": "mukaish_embroidery_kurti.json",
+    "velvet palazzo suit":      "velvet_palazzo_suit.json",
 }
 
 WEIGHT_TRENDS = 1.5
@@ -329,9 +331,11 @@ def get_news_signal(keyword):
         if not SERPER_KEY:
             raise ValueError("SERPER_API_KEY not configured")
 
+        # tbs=qdr:m2 restricts results to the past 2 months — prevents old indexed
+        # articles (2023, 2025 Diwali, etc.) from inflating the news score
         response = requests.post(
             "https://google.serper.dev/news",
-            json={"q": f"{keyword} fashion india", "gl": "in", "num": 10},
+            json={"q": f"{keyword} fashion india", "gl": "in", "num": 10, "tbs": "qdr:m2"},
             headers={"X-API-KEY": SERPER_KEY, "Content-Type": "application/json"},
             timeout=10,
         )
@@ -351,18 +355,19 @@ def get_news_signal(keyword):
         positive_hits = sum(1 for w in positive_words if w in all_text)
         top_headlines = [a.get("title", "") for a in articles[:2] if a.get("title")]
 
-        if article_count >= 3 and positive_hits >= 2:
+        # Lower threshold vs. unfiltered: 2-month window returns fewer articles by design
+        if article_count >= 2 and positive_hits >= 1:
             badge_class, badge_text = "badge-up",   "↑ Active coverage"
         elif article_count >= 1:
             badge_class, badge_text = "badge-flat", "→ Some coverage"
         else:
-            badge_class, badge_text = "badge-na",   "— No news found"
+            badge_class, badge_text = "badge-na",   "— No recent news"
 
         result = {
             "status": "success",
             "badge_class": badge_class,
             "badge_text": badge_text,
-            "evidence": (f"{article_count} news articles · "
+            "evidence": (f"{article_count} articles in past 2 months · "
                          f"{positive_hits} fashion-relevant signals"),
             "article_count": article_count,
             "top_headlines": top_headlines,
@@ -396,7 +401,7 @@ def score_signal(value):
     ]):
         return 1.0
     if any(t in s for t in [
-        "flat", "moderate", "some", "→", "sparse", "mentions", "coverage",
+        "flat", "moderate", "some", "→", "mentions", "coverage",
     ]):
         return 0.5
     return 0.0
@@ -1042,7 +1047,8 @@ st.markdown("""
 st.sidebar.markdown("### Try a demo")
 demo_choice = st.sidebar.selectbox(
     "Load a sample analysis:",
-    ["— select —", "co-ord set", "Anarkali Kurti", "cape kurti"],
+    ["— select —", "sharara kurti set", "schiffli cotton kurti",
+     "angrakha kurti", "mukaish embroidery kurti", "velvet palazzo suit"],
     label_visibility="collapsed",
 )
 
@@ -1102,32 +1108,37 @@ with col:
             with open(fpath, "r", encoding="utf-8") as f:
                 demo = json.load(f)
 
-            st.info(f"📁 Demo mode — loaded from cached analysis · {demo.get('analysed_at', 'unknown')}")
+            st.info(f"📁 Demo mode — cached · {demo.get('analysed_at', 'unknown')}")
 
             gt_d   = demo["trends_result"]
             mkt_d  = demo["marketplace_result"]
             soc_d  = demo["social_result"]
+            news_d = demo.get("news_result", {})
             syn_d  = demo["claude_synthesis"]
-            india_fit_d  = syn_d.get("india_fit", {})
-            conv_total_d = demo.get("convergence_total", 0)
-            conv_disp_d  = f"{int(conv_total_d) if conv_total_d == int(conv_total_d) else conv_total_d} / 3"
+            india_fit_d = syn_d.get("india_fit", {})
 
-            # Legacy bet sizing for demo JSONs (old 3-signal scoring)
-            pos_d = count_india_fit_positives(india_fit_d)
-            if conv_total_d >= 2.5 and pos_d >= 4:
-                bet_d = {"bet": "Deeper buy — strong convergent signal", "bet_class": "deeper", "bet_override": None, "desc_prefix": ""}
-            elif conv_total_d >= 1.5 and pos_d >= 3:
-                bet_d = {"bet": "Trial buy — watch 4-week sell-through", "bet_class": "", "bet_override": None, "desc_prefix": ""}
-            elif conv_total_d >= 1.0 and pos_d >= 2:
-                bet_d = {"bet": "Small trial only — high uncertainty", "bet_class": "small-trial", "bet_override": None, "desc_prefix": ""}
-            else:
-                bet_d = {"bet": "Monitor only — do not buy yet", "bet_class": "monitor", "bet_override": None, "desc_prefix": ""}
+            scores_d = {
+                "weighted_score": demo.get("weighted_score", 0),
+                "demand_score":   demo.get("demand_score", 0),
+                "buzz_score":     demo.get("buzz_score", 0),
+                "display":        f"{demo.get('weighted_score', 0):.1f} / {MAX_SCORE}",
+            }
+            bet_d = {
+                "bet":          demo.get("bet", "Monitor only — do not buy yet"),
+                "bet_class":    demo.get("bet_class", "monitor"),
+                "bet_override": demo.get("bet_override"),
+                "desc_prefix":  "",
+            }
 
             demo_card = build_card_html(
                 demo["keyword"], gt_d, mkt_d, soc_d, syn_d,
-                conv_disp_d, india_fit_d, bet_d,
+                scores_d["display"], india_fit_d, bet_d, news_d, scores_d,
             )
-            components.html(demo_card, height=estimate_card_height(india_fit_d, syn_d, bet_d), scrolling=False)
+            components.html(
+                demo_card,
+                height=estimate_card_height(india_fit_d, syn_d, bet_d, scores_d),
+                scrolling=False,
+            )
             st.markdown(
                 f'<div class="signals-timestamp">Signals fetched: {gt_d.get("fetched_at", "N/A")}</div>',
                 unsafe_allow_html=True,
