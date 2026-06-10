@@ -415,11 +415,21 @@ _KURTI_TERMS = {
     "indo western", "indo-western", "kameez",
 }
 
+_GENERIC_ALONE = {"kurti", "kurtis", "kurta", "salwar", "palazzo", "coord", "anarkali"}
+
 def validate_keyword(kw):
     """Returns (True, None) if valid; (False, message) if blocked."""
     if len(kw.strip()) < 3:
         return False, "Please enter a more specific keyword (at least 3 characters)."
-    kw_lower = kw.lower()
+    kw_lower = kw.strip().lower()
+    # Block bare category words — no signal value without a qualifying style term
+    if kw_lower in _GENERIC_ALONE:
+        return False, (
+            f"**'{kw}'** is too generic to analyse — it's a category name, not a trend.\n\n"
+            f"Add a style, fabric, print, or occasion qualifier to make it specific, for example:\n"
+            f"*mirror embroidery kurti* · *block print kurti* · *angrakha kurta* · "
+            f"*schiffli cotton kurti* · *velvet palazzo suit*"
+        )
     if any(t in kw_lower for t in _KURTI_TERMS):
         return True, None
     return False, (
