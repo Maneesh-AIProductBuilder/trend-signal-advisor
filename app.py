@@ -401,7 +401,7 @@ def score_signal(value):
     ]):
         return 1.0
     if any(t in s for t in [
-        "flat", "moderate", "some", "→", "sparse", "mentions", "coverage",
+        "flat", "moderate", "some", "→", "mentions", "coverage",
     ]):
         return 0.5
     return 0.0
