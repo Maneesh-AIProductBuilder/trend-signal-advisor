@@ -423,11 +423,12 @@ def validate_keyword(kw):
     if any(t in kw_lower for t in _KURTI_TERMS):
         return True, None
     return False, (
-        f"**'{kw}'** is not in the women's kurtis category — "
-        f"this tool is scoped to India womenswear kurtis only.\n\n"
-        f"Please include a kurti-style term in your keyword — for example:\n"
-        f"*mirror embroidery kurti*, *angrakha kurta*, *schiffli cotton kurti*, "
-        f"*block print co-ord set*, *velvet palazzo suit*."
+        f"**'{kw}'** is outside this tool's scope.\n\n"
+        f"This tool analyses trends only for **India womenswear kurtis** — "
+        f"kurti styles, co-ord sets, angrakha, palazzo suits, and similar ethnic tops.\n\n"
+        f"Try a keyword that includes a style term, for example:\n"
+        f"*mirror embroidery kurti* · *angrakha kurta* · "
+        f"*schiffli cotton kurti* · *block print co-ord set* · *velvet palazzo suit*"
     )
 
 
