@@ -42,6 +42,7 @@ from app import (
     count_india_fit_positives, build_card_html, estimate_card_height,
     WEIGHT_TRENDS, WEIGHT_MARKET, WEIGHT_SOCIAL, WEIGHT_NEWS, MAX_SCORE,
     DEMO_FILE_MAP, SAMPLE_DIR,
+    validate_keyword, _buying_horizon_season,
 )
 
 failures = []
@@ -303,6 +304,53 @@ for kw, fname in DEMO_FILE_MAP.items():
     check(f"DEMO_FILE_MAP[{repr(kw)}] file exists", os.path.exists(fpath), fpath)
 
 # ─────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+print("\n=== 9. validate_keyword ===")
+for kw in ["mirror embroidery kurti", "schiffli cotton kurti", "block print co-ord set", "angrakha kurta"]:
+    ok, msg = validate_keyword(kw)
+    check(f"validate_keyword valid: {repr(kw[:35])}", ok is True and msg is None, f"ok={ok} msg={msg}")
+
+for kw in ["kurtis", "kurti", "salwar", "anarkali", "coord"]:
+    ok, msg = validate_keyword(kw)
+    check(f"validate_keyword generic-blocked: {repr(kw)}", ok is False and msg, f"ok={ok}")
+
+for kw in ["canvas shoes", "denim jeans", "saree", "lehenga"]:
+    ok, msg = validate_keyword(kw)
+    check(f"validate_keyword out-of-scope: {repr(kw)}", ok is False and msg, f"ok={ok}")
+
+check("validate_keyword too-short blocked", validate_keyword("ab")[0] is False)
+
+# ─────────────────────────────────────────────────────────────────────────────
+print("\n=== 10. compute_bet — bet_logic_tooltip field ===")
+sc_trial = mk_scores(2.6, 1.75, 0.85, 0.5, 1.0, 0.5, 0.5)
+bet = compute_bet(sc_trial, mk_mkt("moderate", 2), GOOD, 3)
+check("compute_bet returns bet_logic_tooltip key", "bet_logic_tooltip" in bet)
+check("bet_logic_tooltip is non-empty string", isinstance(bet.get("bet_logic_tooltip"), str) and len(bet["bet_logic_tooltip"]) > 10)
+
+# Verify tooltip text reflects the actual rule (trial buy → threshold language)
+check("trial buy tooltip mentions threshold", "2.5" in bet["bet_logic_tooltip"] or "threshold" in bet["bet_logic_tooltip"])
+
+# Deeper buy tooltip
+sc_deep = mk_scores(3.75, 2.5, 1.25, 1.0, 1.0, 1.0, 1.0)
+bet_d = compute_bet(sc_deep, mk_mkt("moderate", 2), GOOD, 4)
+check("deeper buy tooltip mentions 3.5", "3.5" in bet_d["bet_logic_tooltip"])
+
+# Override tooltip
+sc_ov = mk_scores(3.75, 2.5, 1.25, 1.0, 1.0, 1.0, 1.0)
+bet_ov = compute_bet(sc_ov, mk_mkt("moderate", 2), {"price_band": "Does not fit", "climate_fit": "Yes", "cultural_fit": "Yes", "value_fashion_fit": "Yes"}, 3)
+check("india-fit override tooltip mentions hard-stop", "Hard-stop" in bet_ov["bet_logic_tooltip"] or "hard" in bet_ov["bet_logic_tooltip"].lower())
+
+# ─────────────────────────────────────────────────────────────────────────────
+print("\n=== 11. _buying_horizon_season ===")
+season = _buying_horizon_season()
+check("_buying_horizon_season returns non-empty string", isinstance(season, str) and len(season) > 5)
+check("_buying_horizon_season contains month range", any(m in season for m in ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]))
+
+# build_card_html works with bet_logic_tooltip missing (legacy dict)
+gt_c, mkt_c, soc_c, news_c, syn_c, bet_c, sc_c = mk_card_inputs()
+html_leg = build_card_html("test kurti", gt_c, mkt_c, soc_c, syn_c, "2.5 / 4.5", GOOD, bet_c, news_c, sc_c)
+check("build_card_html handles missing bet_logic_tooltip gracefully", len(html_leg) > 2000)
+
 print(f"\n{'='*55}")
 print(f"  PASSED: {passed}   FAILED: {len(failures)}")
 if failures:

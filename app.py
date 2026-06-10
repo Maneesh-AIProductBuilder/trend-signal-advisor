@@ -541,11 +541,58 @@ def compute_bet(scores, marketplace_result, india_fit, india_fit_positives):
         bet       = "Do not buy — no meaningful signal"
         bet_class = "monitor"
 
+    # Tooltip that explains exactly which rule produced this recommendation
+    if bet_override:
+        if "india-fit" in bet.lower():
+            bet_logic_tooltip = (
+                f"Hard-stop rule: price band or climate fit fails India criteria. "
+                f"Signal score ({weighted_score:.1f}/{MAX_SCORE}) is overridden &#8212; "
+                f"fit conditions must pass before any buy decision."
+            )
+        elif "oversupply" in bet.lower():
+            bet_logic_tooltip = (
+                f"Override: heavy marketplace discounting + weak demand "
+                f"(Trends {trends_raw:.1f} &#183; Market {market_raw:.1f}). "
+                f"Signals supplier liquidation, not a rising trend."
+            )
+        else:
+            bet_logic_tooltip = (
+                f"Override: demand weak (demand {scores['demand_score']:.1f}/2.5) "
+                f"despite active buzz ({buzz_score:.1f}/2.0). "
+                f"Buzz-only signals often do not convert to value-fashion sales."
+            )
+    elif "deeper buy" in bet.lower():
+        bet_logic_tooltip = (
+            f"Score {weighted_score:.1f}/{MAX_SCORE} &#8805; 3.5 threshold &#183; "
+            f"India fit {india_fit_positives}/4 &#8805; 4 required. All conditions met."
+        )
+    elif "trial buy" in bet.lower():
+        bet_logic_tooltip = (
+            f"Score {weighted_score:.1f}/{MAX_SCORE} &#8805; 2.5 threshold &#183; "
+            f"India fit {india_fit_positives}/4 &#8805; 3 required. Strong enough for a trial."
+        )
+    elif "small trial" in bet.lower():
+        bet_logic_tooltip = (
+            f"Score {weighted_score:.1f}/{MAX_SCORE} &#8805; 1.5 threshold &#183; "
+            f"India fit {india_fit_positives}/4 &#8805; 2 required. Marginal &#8212; limit exposure."
+        )
+    elif weighted_score >= 0.75:
+        bet_logic_tooltip = (
+            f"Score {weighted_score:.1f}/{MAX_SCORE} is between 0.75&#8211;1.5. "
+            f"Too weak to commit inventory &#8212; worth monitoring 3&#8211;4 weeks."
+        )
+    else:
+        bet_logic_tooltip = (
+            f"Score {weighted_score:.1f}/{MAX_SCORE} is below the 0.75 minimum threshold. "
+            f"No reliable basis for a buy decision at this time."
+        )
+
     return {
-        "bet":          bet,
-        "bet_class":    bet_class,
-        "bet_override": bet_override,
-        "desc_prefix":  "",
+        "bet":               bet,
+        "bet_class":         bet_class,
+        "bet_override":      bet_override,
+        "desc_prefix":       "",
+        "bet_logic_tooltip": bet_logic_tooltip,
     }
 
 
@@ -580,9 +627,11 @@ def synthesize_with_claude(keyword, trends_result, marketplace_result, social_re
         news_badge    = news_result.get("badge_text", "N/A") if news_result else "N/A"
         news_evidence = news_result.get("evidence", "N/A") if news_result else "N/A"
 
+        season = _buying_horizon_season()
         user_prompt = f"""Trend: {keyword}
 Category: Indian womenswear — kurtis and co-ord sets
 Retailer: Value fashion, ₹399–₹1,499, Tier 1–3 India
+Buying horizon: inventory bought now will sell during {season} — evaluate climate fit for that season, NOT today
 
 DEMAND SIGNALS (weighted higher — more reliable for buying decisions):
 1. Google Trends India [weight 1.5x]: {trends_result['direction']} — {trends_result['evidence']}
@@ -604,8 +653,8 @@ Please respond with ONLY a JSON object and nothing else:
   "india_fit": {{
     "price_band": "Fits / Partial / Does not fit",
     "price_band_reason": "one sentence",
-    "climate_fit": "Yes / Partial / No",
-    "climate_fit_reason": "one sentence about Indian heat/monsoon suitability",
+    "climate_fit": "Yes / Partial / No (evaluate for the buying horizon: {season})",
+    "climate_fit_reason": "one sentence about suitability for {season} in India",
     "occasion_fit": "comma-separated e.g. casual, ethnic, college, festive",
     "cultural_fit": "Yes / Partial / No",
     "cultural_fit_reason": "one sentence about modesty norms and cultural acceptance",
@@ -727,6 +776,20 @@ def _track_next(bet):
         return "Recheck if marketplace health improves or search demand rises"
 
 
+# ── Buying horizon season helper ──────────────────────────────────────────────
+def _buying_horizon_season():
+    """Returns the likely selling season ~4 months from now (typical buying-to-shelf horizon)."""
+    sell_month = (datetime.now().month + 3) % 12 + 1
+    if sell_month in (10, 11, 12, 1):
+        return "festive / winter (Oct–Jan)"
+    elif sell_month in (2, 3, 4):
+        return "spring / wedding (Feb–Apr)"
+    elif sell_month in (5, 6):
+        return "summer / pre-monsoon (May–Jun)"
+    else:
+        return "monsoon / post-monsoon (Jul–Sep)"
+
+
 # ── India-fit badge HTML helper ────────────────────────────────────────────────
 def _fit_badge(value):
     v = (value or "").lower()
@@ -755,7 +818,7 @@ def _inline_badge(badge_class, badge_text):
 
 # ── Estimate card height from content length ───────────────────────────────────
 def estimate_card_height(india_fit, syn, bet_data, scores=None):
-    base = 960 if scores is None else 1060
+    base = 960 if scores is None else 1095
     char_per_line = 68
 
     def lines(text):
@@ -784,6 +847,7 @@ def estimate_card_height(india_fit, syn, bet_data, scores=None):
 def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
                     india_fit, bet_data, news=None, scores=None):
     bet_class_attr = f' {bet_data["bet_class"]}' if bet_data["bet_class"] else ""
+    bet_logic      = bet_data.get("bet_logic_tooltip", "")
 
     _news = news or {"badge_class": "badge-na", "badge_text": "— Unavailable", "evidence": "News signal not fetched"}
 
@@ -793,15 +857,32 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
     vf_badge       = _fit_badge(india_fit.get("value_fashion_fit", "Partial"))
     occasion_str   = india_fit.get("occasion_fit", "—")
 
-    # Score display with qualitative label
+    # Score display with qualitative label and ⓘ breakdown tooltip
     if scores:
-        ws = scores["weighted_score"]
+        ws    = scores["weighted_score"]
+        tc    = scores["trends_raw"]  * WEIGHT_TRENDS
+        mc    = scores["market_raw"]  * WEIGHT_MARKET
+        sc_v  = scores["social_raw"]  * WEIGHT_SOCIAL
+        nc    = scores["news_raw"]    * WEIGHT_NEWS
+        score_tooltip_html = (
+            f'<b>How {ws:.1f} / {MAX_SCORE} is calculated:</b><br><br>'
+            f'Google Trends:&nbsp;&nbsp;{scores["trends_raw"]:.1f} &times; 1.5 = {tc:.2f}<br>'
+            f'Marketplace:&nbsp;&nbsp;&nbsp;&nbsp;{scores["market_raw"]:.1f} &times; 1.0 = {mc:.2f}<br>'
+            f'Social signal:&nbsp;&nbsp;&nbsp;{scores["social_raw"]:.1f} &times; 0.5 = {sc_v:.2f}<br>'
+            f'News coverage:&nbsp;&nbsp;{scores["news_raw"]:.1f} &times; 0.75 = {nc:.2f}<br><br>'
+            f'Raw scale: 0 = none &middot; 0.25 = weak &middot; 0.5 = moderate &middot; 1.0 = strong'
+        )
         score_display_html = (
+            f'<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
             f'<span style="font-size:26px;font-weight:700;color:#1C1917;line-height:1.1;">{ws:.1f}</span>'
-            f'<span style="font-size:13px;color:#78716C;margin-left:4px;">/ {MAX_SCORE}</span>'
-            f'<span style="font-size:10px;font-weight:600;color:#78716C;'
-            f'background:#E8E3DA;padding:2px 8px;border-radius:10px;margin-left:8px;'
-            f'vertical-align:middle;white-space:nowrap;">{_score_label(ws)}</span>'
+            f'<span style="font-size:13px;color:#78716C;">/ {MAX_SCORE}</span>'
+            f'<span style="font-size:10px;font-weight:600;color:#78716C;background:#E8E3DA;'
+            f'padding:2px 8px;border-radius:10px;white-space:nowrap;">{_score_label(ws)}</span>'
+            f'<span class="tooltip-wrap">'
+            f'<i class="tooltip-i">i</i>'
+            f'<span class="tooltip-box" style="width:245px;">{score_tooltip_html}</span>'
+            f'</span>'
+            f'</div>'
         )
     else:
         score_display_html = f'<span style="font-size:22px;font-weight:700;color:#1C1917;">{convergence_display}</span>'
@@ -812,7 +893,8 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
         convergence_panel_html = f"""
     <div class="convergence-panel">
       <div style="margin-bottom:8px;">{score_display_html}</div>
-      <div style="font-size:13px;color:#1C1917;line-height:1.5;margin-bottom:10px;">{signal_agreement}</div>
+      <div style="font-size:13px;color:#1C1917;line-height:1.5;margin-bottom:6px;">{signal_agreement}</div>
+      <div style="font-size:10.5px;color:#9B9590;margin-bottom:8px;">Live data &#8212; Google Trends, Myntra/Meesho catalog, Google News &#183; Not AI-estimated</div>
       <div class="convergence-breakdown">
         <div class="breakdown-row">
           <span class="breakdown-label">Demand</span>
@@ -1062,8 +1144,10 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
           <span class="tooltip-wrap">
             <i class="tooltip-i">i</i>
             <span class="tooltip-box">
-              <b>Proves:</b> Direction of search curiosity in India (90 days)<br><br>
-              <b>Cannot prove:</b> Purchase intent — a viral reel can spike this without generating any sales
+              Tracks how often Indians search this term on Google &#8212; relative scale 0&#8211;100 over 90 days.<br><br>
+              <b>Levels:</b> Rising = sustained upward &middot; Flat = stable &middot; Declining = fading<br><br>
+              <b>Proves:</b> Direction of search curiosity in India<br>
+              <b>Cannot prove:</b> Purchase intent &#8212; a viral reel can spike this without sales
             </span>
           </span>
         </div>
@@ -1079,8 +1163,10 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
           <span class="tooltip-wrap">
             <i class="tooltip-i">i</i>
             <span class="tooltip-box">
-              <b>Proves:</b> Catalog activity and pricing health on India's top fashion marketplaces<br><br>
-              <b>Cannot prove:</b> Actual sell-through — sponsored listings can distort catalog count; discount detection depends on snippet text
+              Scans live product listings on Myntra and Meesho for catalog volume, pricing trends, and discount signals.<br><br>
+              <b>Levels:</b> Rising = fresh inventory at full price &middot; Flat = stable &middot; Oversupply = heavy discounting<br><br>
+              <b>Proves:</b> Catalog activity and pricing health on India&#8217;s top marketplaces<br>
+              <b>Cannot prove:</b> Actual sell-through &#8212; sponsored listings and stockouts can distort signals
             </span>
           </span>
         </div>
@@ -1096,8 +1182,10 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
           <span class="tooltip-wrap">
             <i class="tooltip-i">i</i>
             <span class="tooltip-box">
-              <b>Proves:</b> Web-indexed pages mention this trend alongside creators and reels<br><br>
-              <b>Cannot prove:</b> Real Instagram reach — Instagram blocks search engines; this is Google's index of social pages, not direct data
+              Google search of Instagram and creator pages indexed on the web &#8212; a proxy for influencer and reel activity.<br><br>
+              <b>Levels:</b> Active = many pages indexed &middot; Some = moderate &middot; Minimal = low creator coverage<br><br>
+              <b>Proves:</b> Web-indexed creator and social coverage of this trend<br>
+              <b>Cannot prove:</b> Real Instagram reach &#8212; Instagram blocks search engines; this is an indirect proxy
             </span>
           </span>
         </div>
@@ -1113,8 +1201,10 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
           <span class="tooltip-wrap">
             <i class="tooltip-i">i</i>
             <span class="tooltip-box">
-              <b>Proves:</b> Recent editorial coverage in Indian fashion media (past 2 months)<br><br>
-              <b>Cannot prove:</b> Commercial demand — PR and sponsored content can inflate this signal
+              Google News India search for this trend in the last 2 months &#8212; editorial, fashion blogs, and media mentions.<br><br>
+              <b>Levels:</b> Active coverage = recent editorial buzz &middot; Some mentions = light &middot; No coverage = off media radar<br><br>
+              <b>Proves:</b> Recent editorial attention in Indian fashion media<br>
+              <b>Cannot prove:</b> Commercial demand &#8212; PR and sponsored content inflate this signal
             </span>
           </span>
         </div>
@@ -1145,7 +1235,7 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
 
     <div class="india-row-stack">
       <div class="india-row-top">
-        <span class="india-key">Climate fit</span>
+        <span class="india-key">Climate fit <span style="font-size:10.5px;font-weight:400;color:#9B9590;">(selling season: {_buying_horizon_season()})</span></span>
         {climate_badge}
       </div>
       <div class="india-row-reason">{india_fit.get("climate_fit_reason", "")}</div>
@@ -1179,7 +1269,13 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
   <!-- 4: Buying recommendation -->
   <div class="bet-section">
     <div class="bet-block{bet_class_attr}">
-      <div class="bet-eyebrow">Buying recommendation</div>
+      <div class="bet-eyebrow" style="display:flex;align-items:center;gap:5px;">
+        Buying recommendation
+        <span class="tooltip-wrap">
+          <i class="tooltip-i" style="background:rgba(255,255,255,0.18);color:#D6D3D1;">i</i>
+          <span class="tooltip-box" style="width:255px;">{bet_logic}</span>
+        </span>
+      </div>
       <div class="bet-size-text">{bet_data["bet"]}</div>
       <div class="bet-reason-text">{syn.get("bet_reasoning", "")}</div>
       {track_html}
@@ -1413,6 +1509,8 @@ with col:
                     "card":   card,
                     "height": estimate_card_height(india_fit, syn, bet_data, scores),
                     "ts":     gt.get("fetched_at", "N/A"),
+                    "kw":     kw,
+                    "rec":    bet_data["bet"],
                 }
 
                 # Auto-save if keyword matches a demo slot
@@ -1445,6 +1543,47 @@ with col:
             f'<div class="signals-timestamp">Signals fetched: {r["ts"]}</div>',
             unsafe_allow_html=True,
         )
+
+        # ── Buyer feedback (satisfies PDF feedback-loop requirement) ──────────
+        fb_key = f"fb_{r.get('kw', 'unknown')}"
+        if not st.session_state.get(fb_key, False):
+            st.markdown(
+                '<p style="font-size:11.5px;color:#9B9590;margin:10px 0 4px;">'
+                '&#128203; Did you act on this? Helps improve the tool (optional, 10 seconds)</p>',
+                unsafe_allow_html=True,
+            )
+            with st.form("feedback_form", clear_on_submit=False):
+                fb_action = st.radio(
+                    "action",
+                    ["Will monitor", "Buying / ordering", "Decided not to buy", "Signal seems wrong"],
+                    horizontal=True,
+                    label_visibility="collapsed",
+                )
+                fb_note = st.text_input(
+                    "note",
+                    placeholder="Optional: what did you observe or decide?",
+                    label_visibility="collapsed",
+                )
+                fb_submit = st.form_submit_button("Submit feedback →")
+            if fb_submit:
+                record = {
+                    "ts":             datetime.now().isoformat(),
+                    "keyword":        r.get("kw", "unknown"),
+                    "recommendation": r.get("rec", "unknown"),
+                    "action":         fb_action,
+                    "note":           fb_note.strip(),
+                }
+                fb_path = os.path.join(os.path.dirname(__file__), "feedback_log.jsonl")
+                with open(fb_path, "a", encoding="utf-8") as fh:
+                    fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+                st.session_state[fb_key] = True
+                st.rerun()
+        else:
+            st.markdown(
+                '<p style="font-size:11px;color:#9B9590;text-align:right;margin-top:4px;">'
+                '&#10003; Feedback recorded &#8212; thank you</p>',
+                unsafe_allow_html=True,
+            )
 
     elif st.session_state.active_mode == "demo" and demo_choice != "— select —":
         fname = DEMO_FILE_MAP.get(demo_choice)
