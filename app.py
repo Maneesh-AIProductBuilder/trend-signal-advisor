@@ -415,14 +415,6 @@ _KURTI_TERMS = {
     "indo western", "indo-western", "kameez",
 }
 
-_ERROR_MSG = (
-    "This tool is scoped to **India womenswear kurtis** only.\n\n"
-    "Please include a kurti-style term in your keyword — for example:\n"
-    "*mirror embroidery kurti*, *block print co-ord set*, *angrakha kurta*, "
-    "*schiffli cotton kurti*, *velvet palazzo suit*."
-)
-
-
 def validate_keyword(kw):
     """Returns (True, None) if valid; (False, message) if blocked."""
     if len(kw.strip()) < 3:
@@ -430,7 +422,13 @@ def validate_keyword(kw):
     kw_lower = kw.lower()
     if any(t in kw_lower for t in _KURTI_TERMS):
         return True, None
-    return False, _ERROR_MSG
+    return False, (
+        f"**'{kw}'** is not in the women's kurtis category — "
+        f"this tool is scoped to India womenswear kurtis only.\n\n"
+        f"Please include a kurti-style term in your keyword — for example:\n"
+        f"*mirror embroidery kurti*, *angrakha kurta*, *schiffli cotton kurti*, "
+        f"*block print co-ord set*, *velvet palazzo suit*."
+    )
 
 
 def compute_convergence(gt, mkt, soc, news=None):
