@@ -1,0 +1,73 @@
+{
+  "keyword": "mukaish embroidery kurti",
+  "analysed_at": "10 Jun 2026 17:52",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 0/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "mukaish embroidery kurti",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 17:52",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate catalog presence",
+    "evidence": "10 listings · 0 launch signals · 2 discount signals",
+    "market_health": "moderate",
+    "catalog_count": 10,
+    "discount_hits": 2,
+    "fetched_at": "10 Jun 2026 17:52",
+    "from_cache": false
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "weak",
+    "badge_class": "badge-down",
+    "badge_text": "↓ Weak",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 17:52"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Active coverage",
+    "evidence": "5 news articles · 2 fashion-relevant signals",
+    "article_count": 5,
+    "top_headlines": [
+      "Radhika Merchant, Shloka Mehta wow in traditional Indian wear to visit Siddhivinayak temple for Mukesh Ambani's birthday | Fashion Trends",
+      "Dior’s Couture Shines With Indian Mukaish Priced Over A Whopping Crore, Sparks Outrage"
+    ],
+    "fetched_at": "10 Jun 2026 17:52",
+    "from_cache": false
+  },
+  "weighted_score": 2.0,
+  "demand_score": 1.25,
+  "buzz_score": 0.75,
+  "bet": "Small trial only — high uncertainty",
+  "bet_class": "small-trial",
+  "bet_override": null,
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Mukaish embroidery kurtis at ₹399–₹1,499 align with mid-market value-fashion positioning; Dior's couture reference is editorial noise irrelevant to this price band.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Mukaish (gold/metallic threadwork) adds weight and heat; suitable for winter/festive but uncomfortable in summer heat and monsoon moisture.",
+      "occasion_fit": "festive, wedding, temple-visit, ethnic, occasion wear",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Mukaish embroidery is rooted in Indian bridal and festive wear traditions; aligns with modesty norms and cultural celebration contexts.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Meesho shows only 10 listings with zero launches and 2 discounts—indicating weak stocking commitment; embroidery complexity may inflate cost relative to value-fashion margin expectations."
+    },
+    "convergence_summary": "Mukaish kurtis have cultural legitimacy and editorial buzz (Radhika Merchant reference, Dior coverage) but show zero momentum on Google Trends and weak marketplace inventory—suggesting awareness without demand conversion.",
+    "signal_agreement": "Strong conflict: buzz/editorial signals (news articles, celebrity wear) suggest trend energy, but demand signals (flat Google Trends, minimal marketplace presence, no launches) indicate this is not translating to consumer search or purchase intent.",
+    "disagreement_note": "Would need: (1) marketplace search-volume data on mukaish vs competing embroidery types; (2) click-through and cart-add rates on existing 10 Meesho listings; (3) regional breakdown—is mukaish demand concentrated in metro/festive season only, masking Tier 2–3 flatness?",
+    "bet_reasoning": "Do not stock heavily. The Radhika Merchant and Dior references are celebrity/editorial reach, not grassroots demand signals—Google Trends flatness and minimal Meesho activity suggest mukaish kurtis remain niche and seasonal. Test with 1–2 SKUs at ₹699–₹999 price point (easier margin than ₹399–₹599) during Diwali/wedding season; measure sell-through before committing to re-orders.",
+    "skepticism_flag": "The two Google News articles mention mukaish but are anchored to Radhika Merchant (aspirational/celebrity context) and Dior couture (₹1 crore+ pricing)—neither validates mass-market demand at ₹399–₹1,499; news coverage can feel like trend without reflecting value-fashion customer search behavior.",
+    "error": false
+  }
+}

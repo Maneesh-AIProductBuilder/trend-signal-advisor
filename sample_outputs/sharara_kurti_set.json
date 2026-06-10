@@ -1,0 +1,73 @@
+{
+  "keyword": "sharara kurti set",
+  "analysed_at": "10 Jun 2026 17:51",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 12/100 now vs 7/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "sharara kurti set",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 17:51",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate catalog presence",
+    "evidence": "10 listings · 1 launch signals · 2 discount signals",
+    "market_health": "moderate",
+    "catalog_count": 10,
+    "discount_hits": 2,
+    "fetched_at": "10 Jun 2026 17:51",
+    "from_cache": false
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Strong",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 17:51"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Active coverage",
+    "evidence": "10 news articles · 7 fashion-relevant signals",
+    "article_count": 10,
+    "top_headlines": [
+      "From Classic To Contemporary: 12 Diwali 2025 Outfit Ideas For Every Celebration",
+      "Where To Buy Traditional Indian Clothes In Singapore 2026"
+    ],
+    "fetched_at": "10 Jun 2026 17:51",
+    "from_cache": false
+  },
+  "weighted_score": 2.5,
+  "demand_score": 1.25,
+  "buzz_score": 1.25,
+  "bet": "Monitor only — buzz without demand",
+  "bet_class": "monitor",
+  "bet_override": "Override: demand signals are weak despite active editorial/social buzz. Social buzz may not convert to value-fashion sales. Watch 4 weeks before any commitment.",
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Sharara kurti sets are predominantly positioned in the ₹399–₹1,299 bracket at Meesho/Amazon, aligning with your value-fashion ceiling.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Sharara sets work for festive/cooler seasons and air-conditioned indoor events, but the layered silhouette and dupatta may feel heavy during summer and monsoon in most Indian climates.",
+      "occasion_fit": "festive, ethnic, wedding-adjacent, Diwali, family celebrations",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Sharara sets carry strong cultural legitimacy in North and Central India, with modest proportions and traditional aesthetics widely accepted across conservative and urban audiences.",
+      "value_fashion_fit": "Yes",
+      "value_fashion_fit_reason": "Meesho's 10 active listings and discount signals confirm customer willingness to transact; Tier 2–3 festive demand aligns with sharara's occasion-driven nature."
+    },
+    "convergence_summary": "Signals show a moderate, occasion-specific trend with seasonal demand spikes (Diwali 2025) rather than sustained year-round momentum; editorial coverage amplifies visibility, but marketplace depth and search interest remain modest.",
+    "signal_agreement": "Partial disagreement: Google Trends shows 71% lift over six weeks (strong), but Myntra/Meesho catalog presence is thin (10 listings) and marketplace discounts suggest inventory pressure, not organic pull.",
+    "disagreement_note": "Resolve via: (1) Check Meesho/Myntra sales velocity and return rates on existing sharara kurti listings; (2) Track Google Trends weekly through Diwali 2025 to confirm sustained lift vs. one-time spike; (3) Survey Tier 2 retailer sell-through data if you stock test units.",
+    "bet_reasoning": "Google Trends lift (71% in 6 weeks) + seasonal editorial buzz (Diwali 2025 guides) + cultural legitimacy suggest a real festive micro-trend worth a controlled buy-in of 300–500 units across Tier 2–3 geographies. However, flat absolute search interest (12/100 vs. 100 peak) and shallow marketplace competition indicate this is not a mainstream breakout—position it as a seasonal festive offer, not core assortment.",
+    "skepticism_flag": "Google Trends lift may reflect Diwali seasonal noise and organic search interest from legacy searches rather than intent to purchase at value-fashion price points; the 90-day window captures pre-festive planning, which inflates perceived demand that may not sustain post-Diwali.",
+    "error": false
+  }
+}

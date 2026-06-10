@@ -25,9 +25,11 @@ ANTHROPIC_KEY = get_api_key("ANTHROPIC_API_KEY")
 SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "sample_outputs")
 
 DEMO_FILE_MAP = {
-    "co-ord set":     "coord_set.json",
-    "Anarkali Kurti": "Anarkali_kurti.json",
-    "cape kurti":     "cape_kurti.json",
+    "sharara kurti set":        "sharara_kurti_set.json",
+    "schiffli cotton kurti":    "schiffli_cotton_kurti.json",
+    "angrakha kurti":           "angrakha_kurti.json",
+    "mukaish embroidery kurti": "mukaish_embroidery_kurti.json",
+    "velvet palazzo suit":      "velvet_palazzo_suit.json",
 }
 
 WEIGHT_TRENDS = 1.5
@@ -1042,7 +1044,8 @@ st.markdown("""
 st.sidebar.markdown("### Try a demo")
 demo_choice = st.sidebar.selectbox(
     "Load a sample analysis:",
-    ["— select —", "co-ord set", "Anarkali Kurti", "cape kurti"],
+    ["— select —", "sharara kurti set", "schiffli cotton kurti",
+     "angrakha kurti", "mukaish embroidery kurti", "velvet palazzo suit"],
     label_visibility="collapsed",
 )
 
@@ -1102,32 +1105,37 @@ with col:
             with open(fpath, "r", encoding="utf-8") as f:
                 demo = json.load(f)
 
-            st.info(f"📁 Demo mode — loaded from cached analysis · {demo.get('analysed_at', 'unknown')}")
+            st.info(f"📁 Demo mode — cached · {demo.get('analysed_at', 'unknown')}")
 
             gt_d   = demo["trends_result"]
             mkt_d  = demo["marketplace_result"]
             soc_d  = demo["social_result"]
+            news_d = demo.get("news_result", {})
             syn_d  = demo["claude_synthesis"]
-            india_fit_d  = syn_d.get("india_fit", {})
-            conv_total_d = demo.get("convergence_total", 0)
-            conv_disp_d  = f"{int(conv_total_d) if conv_total_d == int(conv_total_d) else conv_total_d} / 3"
+            india_fit_d = syn_d.get("india_fit", {})
 
-            # Legacy bet sizing for demo JSONs (old 3-signal scoring)
-            pos_d = count_india_fit_positives(india_fit_d)
-            if conv_total_d >= 2.5 and pos_d >= 4:
-                bet_d = {"bet": "Deeper buy — strong convergent signal", "bet_class": "deeper", "bet_override": None, "desc_prefix": ""}
-            elif conv_total_d >= 1.5 and pos_d >= 3:
-                bet_d = {"bet": "Trial buy — watch 4-week sell-through", "bet_class": "", "bet_override": None, "desc_prefix": ""}
-            elif conv_total_d >= 1.0 and pos_d >= 2:
-                bet_d = {"bet": "Small trial only — high uncertainty", "bet_class": "small-trial", "bet_override": None, "desc_prefix": ""}
-            else:
-                bet_d = {"bet": "Monitor only — do not buy yet", "bet_class": "monitor", "bet_override": None, "desc_prefix": ""}
+            scores_d = {
+                "weighted_score": demo.get("weighted_score", 0),
+                "demand_score":   demo.get("demand_score", 0),
+                "buzz_score":     demo.get("buzz_score", 0),
+                "display":        f"{demo.get('weighted_score', 0):.1f} / {MAX_SCORE}",
+            }
+            bet_d = {
+                "bet":          demo.get("bet", "Monitor only — do not buy yet"),
+                "bet_class":    demo.get("bet_class", "monitor"),
+                "bet_override": demo.get("bet_override"),
+                "desc_prefix":  "",
+            }
 
             demo_card = build_card_html(
                 demo["keyword"], gt_d, mkt_d, soc_d, syn_d,
-                conv_disp_d, india_fit_d, bet_d,
+                scores_d["display"], india_fit_d, bet_d, news_d, scores_d,
             )
-            components.html(demo_card, height=estimate_card_height(india_fit_d, syn_d, bet_d), scrolling=False)
+            components.html(
+                demo_card,
+                height=estimate_card_height(india_fit_d, syn_d, bet_d, scores_d),
+                scrolling=False,
+            )
             st.markdown(
                 f'<div class="signals-timestamp">Signals fetched: {gt_d.get("fetched_at", "N/A")}</div>',
                 unsafe_allow_html=True,

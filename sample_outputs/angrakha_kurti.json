@@ -1,0 +1,73 @@
+{
+  "keyword": "angrakha kurti",
+  "analysed_at": "10 Jun 2026 17:52",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 18/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "angrakha kurti",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 17:51",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate catalog presence",
+    "evidence": "10 listings · 0 launch signals · 1 discount signals",
+    "market_health": "moderate",
+    "catalog_count": 10,
+    "discount_hits": 1,
+    "fetched_at": "10 Jun 2026 17:52",
+    "from_cache": false
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 17:52"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Active coverage",
+    "evidence": "10 news articles · 6 fashion-relevant signals",
+    "article_count": 10,
+    "top_headlines": [
+      "Ankita Lokhande's bandhani angrakha is GORGEOUS",
+      "6 Sabse Stylish Desi Outfits We Have Wishlisted From The Amazon Great Indian Festival Sale"
+    ],
+    "fetched_at": "10 Jun 2026 17:52",
+    "from_cache": false
+  },
+  "weighted_score": 2.25,
+  "demand_score": 1.25,
+  "buzz_score": 1.0,
+  "bet": "Monitor only — buzz without demand",
+  "bet_class": "monitor",
+  "bet_override": "Override: demand signals are weak despite active editorial/social buzz. Social buzz may not convert to value-fashion sales. Watch 4 weeks before any commitment.",
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Angrakha kurtis are typically cotton or cotton-blend, unstructured garments that retail comfortably in the ₹399–₹1,499 range across value-fashion platforms.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Angrakha's draped, overlapping front design works for spring/festive seasons but can feel heavy during peak summer heat in Tier 2–3 India.",
+      "occasion_fit": "casual, ethnic, festive, wedding season, office",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Angrakha is a classical Mughal-era silhouette with deep cultural roots; modest, loose-fitting, and widely accepted across conservative and fashion-forward demographics.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Meesho and Vishal Mega Mart customers show interest in ethnic, regional, and festival wear, but only 10 listings on Myntra/Meesho and no new launches suggest this is not yet a priority stocking item."
+    },
+    "convergence_summary": "Google Trends shows a real spike (18→100 over 90 days), driven by Bollywood/celebrity editorial coverage, but marketplace inventory and zero new launches reveal buyers have not yet converted buzz into sustained demand.",
+    "signal_agreement": "Signals conflict: editorial/celebrity buzz is strong (10 news articles, Ankita Lokhande mentions), but marketplace demand is muted (only 10 listings, no launches, 1 discount signal only).",
+    "disagreement_note": "Monitor Myntra/Meesho for new SKU launches and repeat-order velocity over the next 4–6 weeks; if inventory expands without discounting, buzz is converting. If listings remain flat and only discount-driven, trend is editorial-led only.",
+    "bet_reasoning": "The Google Trends spike is real and geo-tagged to India, and celebrity coverage (Ankita Lokhande) typically drives ethnic wear sales in value-fashion. However, the lack of marketplace expansion (0 launches, only 10 listings) and the weighted score of 2.2/4.5 suggest this is still in early-stage hype rather than proven sell-through.",
+    "skepticism_flag": "Google News and Instagram mentions are heavily influenced by Bollywood/celebrity styling and Amazon/Flipkart campaign coverage—these editorial signals often spike short-term interest without converting to repeat retail sales at value-fashion price points, particularly if the customer base has not yet seen inventory in physical or live-shop formats.",
+    "error": false
+  }
+}

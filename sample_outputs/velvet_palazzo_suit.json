@@ -1,0 +1,73 @@
+{
+  "keyword": "velvet palazzo suit",
+  "analysed_at": "10 Jun 2026 17:52",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 0/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "velvet palazzo suit",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 17:52",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate catalog presence",
+    "evidence": "10 listings · 0 launch signals · 3 discount signals",
+    "market_health": "moderate",
+    "catalog_count": 10,
+    "discount_hits": 3,
+    "fetched_at": "10 Jun 2026 17:52",
+    "from_cache": false
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "weak",
+    "badge_class": "badge-down",
+    "badge_text": "↓ Weak",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 17:52"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Active coverage",
+    "evidence": "10 news articles · 5 fashion-relevant signals",
+    "article_count": 10,
+    "top_headlines": [
+      "Crocs India Redefines Festive Dressing With Its New Festive Edit ’25 | Grazia India",
+      "Palazzo Times"
+    ],
+    "fetched_at": "10 Jun 2026 17:52",
+    "from_cache": false
+  },
+  "weighted_score": 2.0,
+  "demand_score": 1.25,
+  "buzz_score": 0.75,
+  "bet": "Do not buy — India-fit failure",
+  "bet_class": "monitor",
+  "bet_override": "Hard stop: this trend fails India price band or climate fit — signal strength is irrelevant.",
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Partial",
+      "price_band_reason": "Velvet palazzo suits can be made at ₹399–₹999 but require fabric investment; premium positioning may push toward ₹1,200+, limiting volume at value price points.",
+      "climate_fit": "No",
+      "climate_fit_reason": "Velvet is heavy and warm; unsuitable for Indian heat and monsoon except winter/festive season (Nov–Dec), limiting year-round appeal in value fashion.",
+      "occasion_fit": "festive, ethnic, wedding, occasional wear",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Palazzo suits align with modest silhouettes and are culturally accepted for festive and ethnic occasions across Tier 2–3 India.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Meesho/Vishal customers buy occasion wear but velvet suits require higher margin to cover fabric cost; only viable at higher end of ₹1,200–₹1,499 band."
+    },
+    "convergence_summary": "Signals collectively suggest weak-to-moderate seasonal demand with editorial noise unrelated to actual marketplace movement—velvet palazzo is a niche festive play, not a sustained trend.",
+    "signal_agreement": "Demand and buzz conflict: marketplace shows only moderate presence (10 listings, no launches, discounting) while news coverage is active but generic and largely unrelated (Crocs, 'Palazzo Times').",
+    "disagreement_note": "Direct SKU-level sales data (sell-through rate, return rate, average inventory age) from Myntra/Meesho for velvet palazzo suits in last 60 days would clarify if editorial buzz translates to conversion or is editorial churn.",
+    "bet_reasoning": "Google Trends flatline (0/100 current vs 0/100 six weeks ago) and weak marketplace signals (10 listings, 3 discounts) indicate limited organic demand despite news mentions. The 'Palazzo Times' headline and Crocs feature suggest editorial coverage is broad and potentially misleading—velvet palazzo is likely a micro-seasonal festive pick, not a trend with legs for value fashion's volume requirements.",
+    "skepticism_flag": "Google News 'active coverage' (10 articles) may reflect editorial calendar rotation for festive content, not genuine category momentum—velvet palazzo could be a one-off feature buried among unrelated stories (Crocs, generic 'Palazzo Times'), inflating perceived trend strength without corresponding demand signal.",
+    "error": false
+  }
+}

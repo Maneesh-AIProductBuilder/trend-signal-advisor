@@ -1,0 +1,72 @@
+{
+  "keyword": "schiffli cotton kurti",
+  "analysed_at": "10 Jun 2026 17:51",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 0/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "schiffli cotton kurti",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 17:51",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate catalog presence",
+    "evidence": "10 listings · 0 launch signals · 2 discount signals",
+    "market_health": "moderate",
+    "catalog_count": 10,
+    "discount_hits": 2,
+    "fetched_at": "10 Jun 2026 17:51",
+    "from_cache": false
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "weak",
+    "badge_class": "badge-down",
+    "badge_text": "↓ Weak",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 17:51"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Some coverage",
+    "evidence": "1 news articles · 1 fashion-relevant signals",
+    "article_count": 1,
+    "top_headlines": [
+      "Oops ! Kiara Advani faces Nip Slip - Hot Video"
+    ],
+    "fetched_at": "10 Jun 2026 17:51",
+    "from_cache": false
+  },
+  "weighted_score": 1.625,
+  "demand_score": 1.25,
+  "buzz_score": 0.375,
+  "bet": "Small trial only — high uncertainty",
+  "bet_class": "small-trial",
+  "bet_override": null,
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Schiffli embroidery is a mid-tier production technique; ₹699–₹1,299 positioned kurtis align with embroidered cotton kurti consumer expectation at value-fashion price points.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Cotton is ideal for Indian heat, but schiffli's dense embroidery can trap moisture and reduce breathability in humid/monsoon climates.",
+      "occasion_fit": "casual, semi-formal, festive, office",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Schiffli kurtis are modest, traditional-aligned, and widely accepted across regional and religious demographics in Tier 2–3 India.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Meesho shows moderate presence (10 listings) but flat Google Trends and no recent launches suggest this is a stable SKU, not a rising demand signal typical of value-fashion velocity buys."
+    },
+    "convergence_summary": "Schiffli cotton kurtis show weak-to-moderate demand signals: Google Trends is flat, marketplace presence is moderate but static, and celebrity/editorial buzz is negligible—suggesting category familiarity but no momentum.",
+    "signal_agreement": "Demand and buzz signals *agree* on weakness: neither Google Trends nor social/news coverage show lift; marketplace listings exist but lack launch or discount urgency.",
+    "disagreement_note": null,
+    "bet_reasoning": "This is a **low-risk, low-upside hold**—not a buy signal. Schiffli kurtis fit cultural and climate norms and suit the price band, but zero trending momentum and flat marketplace activity indicate no seasonal or TikTok-driven pull. Only stock if inventory turns historically support baseline demand; avoid overbuying on novelty.",
+    "skepticism_flag": "Google Trends and Myntra/Meesho data conflate schiffli as a *production term*, not a consumer search term—buyers search 'cotton kurti' or 'embroidered kurti', not 'schiffli kurti', so zero trend interest may reflect search terminology, not true demand absence.",
+    "error": false
+  }
+}
