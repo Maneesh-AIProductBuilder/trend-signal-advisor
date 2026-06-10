@@ -327,8 +327,8 @@ bet = compute_bet(sc_trial, mk_mkt("moderate", 2), GOOD, 3)
 check("compute_bet returns bet_logic_tooltip key", "bet_logic_tooltip" in bet)
 check("bet_logic_tooltip is non-empty string", isinstance(bet.get("bet_logic_tooltip"), str) and len(bet["bet_logic_tooltip"]) > 10)
 
-# Verify tooltip text reflects the actual rule (trial buy → threshold language)
-check("trial buy tooltip mentions threshold", "2.5" in bet["bet_logic_tooltip"] or "threshold" in bet["bet_logic_tooltip"])
+# Verify tooltip text reflects the actual rule (trial buy → mentions limiting factor)
+check("trial buy tooltip mentions limiting factor", "needs" in bet["bet_logic_tooltip"] or "3.5" in bet["bet_logic_tooltip"] or "aligned" in bet["bet_logic_tooltip"])
 
 # Deeper buy tooltip
 sc_deep = mk_scores(3.75, 2.5, 1.25, 1.0, 1.0, 1.0, 1.0)

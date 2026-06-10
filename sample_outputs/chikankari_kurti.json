@@ -1,0 +1,73 @@
+{
+  "keyword": "chikankari kurti",
+  "analysed_at": "11 Jun 2026 05:11",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 41/100 now vs 58/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "chikankari kurti",
+    "broadened": false,
+    "fetched_at": "11 Jun 2026 05:11"
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate catalog presence",
+    "evidence": "10 listings · 8 category pages · 2 discount signals",
+    "market_health": "moderate",
+    "catalog_count": 10,
+    "discount_hits": 2,
+    "category_pages": 8,
+    "heavy_disc_count": 1,
+    "max_items": 0,
+    "fetched_at": "11 Jun 2026 05:11"
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Strong",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "11 Jun 2026 05:11"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Active coverage",
+    "evidence": "2 articles in past 2 months · 2 fashion-relevant signals",
+    "article_count": 2,
+    "top_headlines": [
+      "This Is Where The Lucknow Locals Are Buying Their Chikankari From",
+      "Fit check: Chennai college students stitch style between freedom and dress codes"
+    ],
+    "fetched_at": "11 Jun 2026 05:11"
+  },
+  "weighted_score": 2.5,
+  "demand_score": 1.25,
+  "buzz_score": 1.25,
+  "bet": "Monitor only — buzz without demand",
+  "bet_class": "monitor",
+  "bet_override": "Override: demand signals are weak despite active editorial/social buzz. Social buzz may not convert to value-fashion sales. Watch 4 weeks before any commitment.",
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Chikankari kurtis at ₹399–₹1,499 align with value-fashion positioning; embroidery-heavy variants command premiums within this range.",
+      "climate_fit": "Yes",
+      "climate_fit_reason": "Chikankari's lightweight cotton construction suits festive/winter layering and is culturally timed to Diwali–New Year gifting cycles in North India.",
+      "occasion_fit": "festive, ethnic, wedding, family gatherings, semi-formal",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Chikankari is a heritage craft with strong regional (Lucknow) and pan-Indian prestige; aligns with festive modesty norms and aspirational value-fashion positioning.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Meesho shows moderate catalog presence (10 listings), but discount signals (2) suggest margin pressure; Vishal/FabIndia value-segment customers buy chikankari, but sustainability of markup is unclear at ₹399–₹799 entry points."
+    },
+    "convergence_summary": "Demand is cooling (Google Trends down 29% in 6 weeks) while editorial buzz remains steady; signals suggest chikankari has moved from trend spike into established seasonal category with stable but not growing interest.",
+    "signal_agreement": "Partial disagreement: demand curves downward, but news coverage and social mentions remain active—suggesting buzz may be trailing falling demand rather than predicting future demand.",
+    "disagreement_note": "Search Myntra/Meesho sales rank and return-on-ad-spend (ROAS) for chikankari vs. plain cotton kurtis in same price band over past 4 weeks to confirm whether price-conscious buyers are shifting away from embroidered styles.",
+    "bet_reasoning": "Google Trends' 29-point drop in 6 weeks is a concrete demand signal; however, it is a 90-day view and peaked earlier in the season, suggesting this is a predictable festive-cycle dip before Oct–Jan surge. Marketplace catalog presence (moderate) and news coverage (active, location-specific) suggest structural demand exists, but entry inventory should be conservative and skew toward ₹699–₹999 sweet-spot to avoid clearance markdown risk at lower price points.",
+    "skepticism_flag": "Google Trends shows decay, but search interest often contracts *before* festive shopping season accelerates (Aug–Sep trough is normal for Oct–Jan inventory); this signal may be a false negative if the buyer's Tier 2–3 customer base shops late (Sept–Oct), not now.",
+    "error": false
+  }
+}

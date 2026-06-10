@@ -1,0 +1,72 @@
+{
+  "keyword": "anarkali kurti",
+  "analysed_at": "11 Jun 2026 05:02",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 38/100 now vs 53/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "anarkali kurti",
+    "broadened": false,
+    "fetched_at": "11 Jun 2026 05:02"
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Rising — category shelf, healthy pricing",
+    "evidence": "10 listings · 7 category pages · no heavy discounting detected",
+    "market_health": "healthy",
+    "catalog_count": 10,
+    "discount_hits": 2,
+    "category_pages": 7,
+    "heavy_disc_count": 0,
+    "max_items": 0,
+    "fetched_at": "11 Jun 2026 05:02"
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "11 Jun 2026 05:02"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Some coverage",
+    "evidence": "1 articles in past 2 months · 1 fashion-relevant signals",
+    "article_count": 1,
+    "top_headlines": [
+      "Pace Out Summers With These 5 Trendy Silk Kurtis For Women On Amazon"
+    ],
+    "fetched_at": "11 Jun 2026 05:02"
+  },
+  "weighted_score": 2.375,
+  "demand_score": 1.75,
+  "buzz_score": 0.625,
+  "bet": "Small trial only — high uncertainty",
+  "bet_class": "small-trial",
+  "bet_override": null,
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Anarkali kurtis are achievable at ₹399–₹1,499 across Myntra/Meesho without heavy discounting.",
+      "climate_fit": "Yes",
+      "climate_fit_reason": "Anarkali's layered, loose silhouette is ideal for festive occasions (Diwali, weddings) and winter layering in Oct–Jan across Tier 1–3 India.",
+      "occasion_fit": "festive, ethnic, wedding, semi-formal, casual",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Anarkali aligns with traditional Indian modesty norms and is culturally accepted across regions for festive and formal wear.",
+      "value_fashion_fit": "Yes",
+      "value_fashion_fit_reason": "Meesho/Vishal customer demographic actively seeks ethnic festive wear; Anarkali is a staple ethnic silhouette with broad appeal and repeat-purchase potential."
+    },
+    "convergence_summary": "Demand signals show declining short-term interest (38 vs 53 six weeks ago) but marketplace health remains stable with no discounting pressure, suggesting baseline acceptance rather than momentum.",
+    "signal_agreement": "Demand and buzz signals partially conflict: Google Trends show softening, but marketplace supply (10 listings, 7 category pages) and editorial coverage remain steady, indicating category resilience rather than growth.",
+    "disagreement_note": "Direct category-level sell-through velocity from Myntra/Meesho would clarify whether flat/declining search interest reflects genuinely lower demand or just normal seasonal Google Trends variance before festive season ramps.",
+    "bet_reasoning": "Anarkali is a proven festive category with climate and cultural fit for Oct–Jan buying; the 2.4/4.5 score reflects only modest demand momentum, not category weakness. Marketplace health and lack of discounting suggest demand exists for well-positioned inventory, but Google Trends decline (38 vs 53) signals this is not a breakout trend—stock conservatively and prioritize quality and differentiation (embroidery, print, fit) over volume.",
+    "skepticism_flag": "Google Trends showing a 28% drop in six weeks is a concrete red flag: this could signal genuine demand erosion for Anarkali ahead of festive season, or it could reflect normal pre-season trough before search spikes closer to Diwali (early Nov)—without category-level sell-through data, you cannot distinguish between these.",
+    "error": false
+  }
+}

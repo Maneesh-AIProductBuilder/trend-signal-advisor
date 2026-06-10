@@ -1,28 +1,29 @@
 {
   "keyword": "mukaish embroidery kurti",
-  "analysed_at": "10 Jun 2026 18:13",
+  "analysed_at": "11 Jun 2026 05:03",
   "trends_result": {
     "status": "success",
     "direction": "flat",
     "badge_class": "badge-flat",
     "badge_text": "→ Flat",
-    "evidence": "Interest: 0/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "evidence": "Interest: 0/100 now vs 2/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
     "actual_keyword": "mukaish embroidery kurti",
     "broadened": false,
-    "fetched_at": "10 Jun 2026 18:13",
-    "from_cache": false
+    "fetched_at": "11 Jun 2026 05:02"
   },
   "marketplace_result": {
     "status": "success",
-    "strength": "moderate",
-    "badge_class": "badge-flat",
-    "badge_text": "→ Moderate catalog presence",
-    "evidence": "10 listings · 0 launch signals · 2 discount signals",
-    "market_health": "moderate",
+    "strength": "weak",
+    "badge_class": "badge-down",
+    "badge_text": "↓ Sparse catalog presence",
+    "evidence": "10 product listings · no dedicated category page — niche or emerging, not yet mainstream",
+    "market_health": "weak",
     "catalog_count": 10,
     "discount_hits": 2,
-    "fetched_at": "10 Jun 2026 18:13",
-    "from_cache": false
+    "category_pages": 0,
+    "heavy_disc_count": 0,
+    "max_items": 0,
+    "fetched_at": "11 Jun 2026 05:02"
   },
   "social_result": {
     "status": "success",
@@ -30,7 +31,7 @@
     "badge_class": "badge-down",
     "badge_text": "↓ Weak",
     "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
-    "fetched_at": "10 Jun 2026 18:13"
+    "fetched_at": "11 Jun 2026 05:03"
   },
   "news_result": {
     "status": "success",
@@ -41,32 +42,31 @@
     "top_headlines": [
       "Radhika Merchant, Shloka Mehta wow in traditional Indian wear to visit Siddhivinayak temple for Mukesh Ambani's birthday | Fashion Trends"
     ],
-    "fetched_at": "10 Jun 2026 18:13",
-    "from_cache": false
+    "fetched_at": "11 Jun 2026 05:03"
   },
-  "weighted_score": 1.625,
-  "demand_score": 1.25,
+  "weighted_score": 1.125,
+  "demand_score": 0.75,
   "buzz_score": 0.375,
-  "bet": "Small trial only — high uncertainty",
-  "bet_class": "small-trial",
+  "bet": "Monitor only — insufficient signal",
+  "bet_class": "monitor",
   "bet_override": null,
   "claude_synthesis": {
     "india_fit": {
       "price_band": "Fits",
-      "price_band_reason": "Mukaish embroidery adds perceived value; ₹699–₹1,199 positioning is standard for embellished kurtis in this segment.",
-      "climate_fit": "Partial",
-      "climate_fit_reason": "Mukaish (zari/metallic thread) adds weight and heat retention; suitable for winter/festive but challenging in summer across Tier 2–3 markets.",
-      "occasion_fit": "festive, ethnic, wedding-adjacent, temple visits, family gatherings",
+      "price_band_reason": "Mukaish embroidery adds perceived value and justifies ₹799–₹1,299 positioning without exceeding value-fashion ceiling.",
+      "climate_fit": "Yes",
+      "climate_fit_reason": "Mukaish (gold-zari embroidery) is strongly associated with festive and winter ethnic wear, aligning perfectly with Oct–Jan demand in North and metro India.",
+      "occasion_fit": "festive, ethnic, wedding, temple visits, celebrations",
       "cultural_fit": "Yes",
-      "cultural_fit_reason": "Mukaish embroidery aligns with traditional Indian aesthetic and modesty norms; celebrity visibility (Radhika Merchant, Shloka Mehta) reinforces cultural legitimacy.",
+      "cultural_fit_reason": "Mukaish embroidery on kurtis aligns with modesty norms and is deeply rooted in Indian festive and bridal traditions.",
       "value_fashion_fit": "Partial",
-      "value_fashion_fit_reason": "Meesho shows only 10 listings with no new launches; suggests either niche demand or oversupply; value-fashion customers often prefer simpler prints/weaves over labor-intensive embroidery."
+      "value_fashion_fit_reason": "Mukaish is traditionally associated with premium segments; value-fashion customers may perceive it as too 'heavy' or expect it only at higher price points, risking perception mismatch."
     },
-    "convergence_summary": "Mukaish kurtis show weak-to-flat organic search demand, modest marketplace presence, and only celebrity editorial lift—signals suggest limited mainstream volume potential despite cultural fit.",
-    "signal_agreement": "Conflicting: buzz (celebrity, editorial) suggests trend credibility, but demand signals (zero Google Trends momentum, flat marketplace, no launches) indicate poor conversion velocity.",
-    "disagreement_note": "Search Meesho and Myntra transaction data (sales volume, return rate, inventory turnover) for mukaish kurtis specifically. Check if the 10 listings are stagnant (old inventory) or actively selling. Verify if celebrity mentions drive actual Tier 2–3 traffic or only Tier 1 aspirational interest.",
-    "bet_reasoning": "Google Trends flat at 0/100 and no recent marketplace launches strongly outweigh a single celebrity sighting; this is editorial momentum without demand pull. The 10 existing Meesho listings with 2 discount signals suggest sellers are clearing stock, not restocking—a red flag for value fashion where inventory health matters more than influencer mentions.",
-    "skepticism_flag": "Radhika Merchant/Shloka Mehta temple visit coverage may skew perception toward premium/bridal mukaish (₹5K+) rather than value-fashion versions (₹399–₹1,499), making the news signal misleading for your price point.",
+    "convergence_summary": "Google Trends and marketplace signals are weak or declining, suggesting mukaish kurtis lack mainstream demand visibility right now, despite cultural and seasonal fit—buzz is niche, not broad.",
+    "signal_agreement": "They conflict: buzz (celebrity, cultural relevance) suggests appeal, but demand (flat/declining trends, sparse catalog, low marketplace presence) indicates minimal transaction readiness.",
+    "disagreement_note": "Search Myntra, Meesho, and local e-commerce for mukaish kurti sell-through rates, return rates, and review sentiment over the past 60 days; check whether sparse catalog reflects low demand or low supply due to production constraints.",
+    "bet_reasoning": "Mukaish kurtis fit the festive/winter window and cultural occasion profile strongly, but Google Trends flatness and only 10 marketplace listings signal the trend has not yet penetrated value-fashion inventory at scale. The Radhika Merchant celebrity reference is a positive editorial signal, but one news article is insufficient to confirm demand translation in the ₹399–₹1,499 segment—celebrity trends often skew premium.",
+    "skepticism_flag": "The single Radhika Merchant celebrity mention may create a false 'trend' impression; high-net-worth celebrity mukaish wear does not predict value-fashion inventory velocity, and editorial buzz can precede or entirely miss retail demand by weeks.",
     "error": false
   }
 }

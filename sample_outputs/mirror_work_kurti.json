@@ -1,0 +1,73 @@
+{
+  "keyword": "mirror work kurti",
+  "analysed_at": "11 Jun 2026 05:02",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 14/100 now vs 5/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "mirror work kurti",
+    "broadened": false,
+    "fetched_at": "11 Jun 2026 05:02"
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Rising — category shelf, healthy pricing",
+    "evidence": "10 listings · 3 category pages · no heavy discounting detected",
+    "market_health": "healthy",
+    "catalog_count": 10,
+    "discount_hits": 2,
+    "category_pages": 3,
+    "heavy_disc_count": 0,
+    "max_items": 0,
+    "fetched_at": "11 Jun 2026 05:02"
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Strong",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "11 Jun 2026 05:02"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Active coverage",
+    "evidence": "2 articles in past 2 months · 2 fashion-relevant signals",
+    "article_count": 2,
+    "top_headlines": [
+      "Tripti Dimri’s Punit Balana sharara set features mirror and marodi work",
+      "Pace Out Summers With These 5 Trendy Silk Kurtis For Women On Amazon"
+    ],
+    "fetched_at": "11 Jun 2026 05:02"
+  },
+  "weighted_score": 3.0,
+  "demand_score": 1.75,
+  "buzz_score": 1.25,
+  "bet": "Trial buy — watch 4-week sell-through",
+  "bet_class": "",
+  "bet_override": null,
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Mirror work embellishment adds perceived luxury; ₹399–₹1,499 allows margin room for embroidered kurtis without premium positioning.",
+      "climate_fit": "Yes",
+      "climate_fit_reason": "Mirror work is traditional festive/wedding season embellishment; Oct–Jan is peak demand for ethnic occasion wear in India.",
+      "occasion_fit": "festive, ethnic, wedding, casual-dressy",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Mirror work aligns with Indian bridal and festive traditions; modesty norms fully respected in kurti silhouettes.",
+      "value_fashion_fit": "Yes",
+      "value_fashion_fit_reason": "Meesho and value-fashion customers actively buy embellished kurtis for festivals; 10 Myntra listings with healthy pricing confirm mainstream acceptance."
+    },
+    "convergence_summary": "Demand signals show meaningful momentum (Google Trends +180% vs 6 weeks ago, marketplace shelf presence, no heavy discounting), while editorial buzz is present but lighter; signals converge on a real but not explosive trend.",
+    "signal_agreement": "Largely agree—demand signals are stronger and more concrete; buzz signals confirm cultural relevance but do not amplify urgency.",
+    "disagreement_note": "Google Trends is currently at 14/100 (down from peak 100), which could signal declining interest or natural off-season softness. Direct category sell-through data from Meesho/Myntra (beyond listing counts) would clarify whether this is seasonal dip or loss of momentum.",
+    "bet_reasoning": "Mirror work kurtis show 1.5x-weighted demand momentum (Google Trends spike) aligned with festive buying horizon and healthy marketplace shelf life without destructive discounting. Marketplace health and zero clearance signals suggest inventory risk is manageable for a value-fashion buyer stocking Oct–Jan.",
+    "skepticism_flag": "Google Trends peak of 100/100 is undated; if that peak occurred during last year's festive season rather than recently, current 14/100 may reflect normal decay rather than growing demand for this specific season.",
+    "error": false
+  }
+}

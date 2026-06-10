@@ -27,11 +27,11 @@ ANTHROPIC_KEY = get_api_key("ANTHROPIC_API_KEY")
 SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "sample_outputs")
 
 DEMO_FILE_MAP = {
-    "sharara kurti set":        "sharara_kurti_set.json",
-    "schiffli cotton kurti":    "schiffli_cotton_kurti.json",
-    "angrakha kurti":           "angrakha_kurti.json",
+    "mirror work kurti":        "mirror_work_kurti.json",
+    "anarkali kurti":           "anarkali_kurti.json",
     "mukaish embroidery kurti": "mukaish_embroidery_kurti.json",
-    "velvet palazzo suit":      "velvet_palazzo_suit.json",
+    "sequin kurti":             "sequin_kurti.json",
+    "chikankari kurti":         "chikankari_kurti.json",
 }
 
 WEIGHT_TRENDS = 1.5
@@ -596,50 +596,95 @@ def compute_bet(scores, marketplace_result, india_fit, india_fit_positives):
         bet       = "Do not buy — no meaningful signal"
         bet_class = "monitor"
 
-    # Tooltip that explains exactly which rule produced this recommendation
+    # Tooltip that explains which rule fired, what the numbers mean, and what to do
     if bet_override:
         if "india-fit" in bet.lower():
+            # Be specific about which India-fit criterion failed
+            if "Does not fit" in india_fit.get("price_band", ""):
+                fail_detail = (
+                    f"Price band '{india_fit.get('price_band', '')}' — "
+                    f"this style's cost structure likely sits outside the "
+                    f"&#8377;399&#8211;&#8377;1,499 value fashion range."
+                )
+            else:
+                season = _buying_horizon_season()
+                fail_detail = (
+                    f"Climate fit is No for {season} — "
+                    f"this fabric or silhouette won&#39;t sell through "
+                    f"before the season ends."
+                )
             bet_logic_tooltip = (
-                f"Hard-stop rule: price band or climate fit fails India criteria. "
-                f"Signal score ({weighted_score:.1f}/{MAX_SCORE}) is overridden &#8212; "
-                f"fit conditions must pass before any buy decision."
+                f"Hard stop: {fail_detail} "
+                f"Signal score ({weighted_score:.1f}/{MAX_SCORE}) is irrelevant "
+                f"until fit criteria pass."
             )
         elif "oversupply" in bet.lower():
+            heavy = marketplace_result.get("heavy_disc_count", 0)
+            cat_pg = marketplace_result.get("category_pages", 0)
             bet_logic_tooltip = (
-                f"Override: heavy marketplace discounting + weak demand "
-                f"(Trends {trends_raw:.1f} &#183; Market {market_raw:.1f}). "
-                f"Signals supplier liquidation, not a rising trend."
+                f"Override: {heavy} snippet{'s' if heavy != 1 else ''} show 60%+ discounts "
+                f"across {cat_pg} category page{'s' if cat_pg != 1 else ''} — "
+                f"suppliers are clearing unsold stock "
+                f"(Trends {trends_raw:.1f} · Market {market_raw:.1f}). "
+                f"Avoid adding inventory to a liquidating market."
             )
         else:
             bet_logic_tooltip = (
-                f"Override: demand weak (demand {scores['demand_score']:.1f}/2.5) "
-                f"despite active buzz ({buzz_score:.1f}/2.0). "
-                f"Buzz-only signals often do not convert to value-fashion sales."
+                f"Override: social and news buzz is active ({buzz_score:.1f}/2.0) "
+                f"but Google Trends and marketplace show weak purchase intent "
+                f"(demand {scores['demand_score']:.1f}/2.5). "
+                f"In value fashion, buzz without search demand rarely converts — "
+                f"monitor 4 more weeks before committing."
             )
     elif "deeper buy" in bet.lower():
         bet_logic_tooltip = (
-            f"Score {weighted_score:.1f}/{MAX_SCORE} &#8805; 3.5 threshold &#183; "
-            f"India fit {india_fit_positives}/4 &#8805; 4 required. All conditions met."
+            f"All signals converge: score {weighted_score:.1f}/{MAX_SCORE} clears the 3.5 "
+            f"threshold and all 4 India fit criteria pass. "
+            f"Strong search demand, healthy marketplace pricing, and fit confirmed — "
+            f"place your planned order volume."
         )
     elif "trial buy" in bet.lower():
+        # Explain what is holding it back from a deeper buy
+        if weighted_score < 3.5 and india_fit_positives < 4:
+            limiting = (f"score {weighted_score:.1f} (needs 3.5) "
+                        f"and India fit {india_fit_positives}/4 (needs 4)")
+        elif weighted_score < 3.5:
+            limiting = f"score {weighted_score:.1f} (needs 3.5 for a deeper buy)"
+        else:
+            limiting = f"India fit {india_fit_positives}/4 (needs all 4 for a deeper buy)"
         bet_logic_tooltip = (
-            f"Score {weighted_score:.1f}/{MAX_SCORE} &#8805; 2.5 threshold &#183; "
-            f"India fit {india_fit_positives}/4 &#8805; 3 required. Strong enough for a trial."
+            f"Positive signal but not fully aligned — {limiting}. "
+            f"Order 30&#8211;40% of your usual quantity and review "
+            f"sell-through after 4 weeks before committing to a full reorder."
         )
     elif "small trial" in bet.lower():
+        # Surface the weakest signals so the buyer knows what to watch
+        weak = []
+        if trends_raw <= 0.25:
+            weak.append("Google Trends weak")
+        if market_raw <= 0.25:
+            weak.append("marketplace sparse")
+        if scores.get("social_raw", 0) <= 0.0:
+            weak.append("no social signal")
+        if scores.get("news_raw", 0) <= 0.0:
+            weak.append("no news coverage")
+        weak_str = " · ".join(weak) if weak else "mixed signals"
         bet_logic_tooltip = (
-            f"Score {weighted_score:.1f}/{MAX_SCORE} &#8805; 1.5 threshold &#183; "
-            f"India fit {india_fit_positives}/4 &#8805; 2 required. Marginal &#8212; limit exposure."
+            f"Score {weighted_score:.1f}/{MAX_SCORE} — real but weak signal ({weak_str}). "
+            f"Limit to a small test order to gauge demand. "
+            f"Re-run analysis in 3&#8211;4 weeks to see if signals strengthen."
         )
     elif weighted_score >= 0.75:
         bet_logic_tooltip = (
-            f"Score {weighted_score:.1f}/{MAX_SCORE} is between 0.75&#8211;1.5. "
-            f"Too weak to commit inventory &#8212; worth monitoring 3&#8211;4 weeks."
+            f"Score {weighted_score:.1f}/{MAX_SCORE} — signal exists but is too diffuse "
+            f"to justify inventory. Watch for Google Trends to rise and marketplace "
+            f"to earn a category page. Re-run in 3&#8211;4 weeks before committing."
         )
     else:
         bet_logic_tooltip = (
-            f"Score {weighted_score:.1f}/{MAX_SCORE} is below the 0.75 minimum threshold. "
-            f"No reliable basis for a buy decision at this time."
+            f"Score {weighted_score:.1f}/{MAX_SCORE} — no reliable signal across "
+            f"any of the 4 indicators. "
+            f"The cost of dead stock outweighs any upside at this confidence level."
         )
 
     return {

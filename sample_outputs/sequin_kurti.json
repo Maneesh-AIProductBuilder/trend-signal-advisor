@@ -1,0 +1,70 @@
+{
+  "keyword": "sequin kurti",
+  "analysed_at": "11 Jun 2026 05:03",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 0/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "sequin kurti",
+    "broadened": false,
+    "fetched_at": "11 Jun 2026 05:03"
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "oversupply",
+    "badge_class": "badge-flat",
+    "badge_text": "⚠ Listed but heavily discounted",
+    "evidence": "10 listings · 3 snippets with 60%+ discounts · possible oversupply or slow sell-through",
+    "market_health": "oversupply",
+    "catalog_count": 10,
+    "discount_hits": 2,
+    "category_pages": 4,
+    "heavy_disc_count": 3,
+    "max_items": 0,
+    "fetched_at": "11 Jun 2026 05:03"
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "11 Jun 2026 05:03"
+  },
+  "news_result": {
+    "status": "success",
+    "badge_class": "badge-na",
+    "badge_text": "— No recent news",
+    "evidence": "0 articles in past 2 months · 0 fashion-relevant signals",
+    "article_count": 0,
+    "top_headlines": [],
+    "fetched_at": "11 Jun 2026 05:03"
+  },
+  "weighted_score": 1.25,
+  "demand_score": 1.0,
+  "buzz_score": 0.25,
+  "bet": "Do not buy — marketplace oversupply",
+  "bet_class": "monitor",
+  "bet_override": "Override: heavy discounting detected on Myntra/Meesho combined with weak search demand. Suppliers are likely liquidating unsold stock — not a rising trend.",
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Sequin embellishment sits naturally in ₹699–₹1,299 sweet spot for value-fashion festive wear.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Sequins suit festive occasions (Oct–Jan weddings, Diwali) but add thermal weight; suitable for indoor/evening wear, less so for daytime in warm Tier 2–3 markets.",
+      "occasion_fit": "festive, ethnic, wedding, celebration",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Sequin kurtis align with Indian modesty norms and are culturally normalized for festive occasions.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Heavy discounting on Myntra/Meesho suggests category saturation; value customers may wait for deeper discounts rather than pay full price."
+    },
+    "convergence_summary": "Demand signals show flat/declining search interest and marketplace oversupply with deep discounting, while editorial buzz is minimal, collectively indicating weakening pull despite cultural fit.",
+    "signal_agreement": "Demand and buzz signals agree: both are weak. Google Trends flat, marketplace discounting heavy, news/social mentions minimal.",
+    "disagreement_note": null,
+    "bet_reasoning": "The 60%+ discounting on Myntra/Meesho is the strongest signal here—it flags oversupply and weak sell-through in the exact channels where value-fashion customers shop. Google Trends at 0/100 with no recent peak during pre-festive season (when sequins typically see lift) suggests demand may not materialize as expected for Oct–Jan inventory commitment.",
+    "skepticism_flag": "Google Trends showing 'Peak: 100/100' is misleading without a date—if that peak was in Jan 2024 (post-festive clearance), current flat 0/100 may indicate the trend has already peaked and declined, not that it's dormant and ready to spike.",
+    "error": false
+  }
+}
