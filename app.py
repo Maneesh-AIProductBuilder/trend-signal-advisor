@@ -1041,21 +1041,8 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
     <span class="result-card-header-kw">{display_kw}</span>
   </div>
 
-  <!-- 1: Buying recommendation FIRST -->
-  <div class="bet-section">
-    <div class="bet-block{bet_class_attr}">
-      <div class="bet-eyebrow">Buying recommendation</div>
-      <div class="bet-size-text">{bet_data["bet"]}</div>
-      <div class="bet-reason-text">{syn.get("bet_reasoning", "")}</div>
-      {track_html}
-    </div>
-  </div>
-
-  <!-- 2: Override warning directly under recommendation -->
-  {override_html}
-
-  <!-- 3: Signal sources (with ⓘ tooltips) -->
-  <div class="result-section" style="margin-top:{('12px' if bet_data.get('bet_override') else '0')};">
+  <!-- 1: Signal sources (with ⓘ tooltips) -->
+  <div class="result-section">
     <div class="section-eyebrow">Signal sources</div>
 
     <div class="signal-row">
@@ -1128,13 +1115,13 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
 
   </div>
 
-  <!-- 4: Overall signal strength -->
+  <!-- 2: Overall signal strength -->
   <div class="result-section">
     <div class="section-eyebrow">Overall signal strength</div>
     {convergence_panel_html}
   </div>
 
-  <!-- 5: India market fit -->
+  <!-- 3: India market fit -->
   <div class="result-section">
     <div class="section-eyebrow">India market fit</div>
 
@@ -1179,17 +1166,31 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
 
   </div>
 
-  <!-- 6: Skepticism flag — elevated, bordered -->
-  <div class="skeptic-section">
+  <!-- 4: Buying recommendation -->
+  <div class="bet-section">
+    <div class="bet-block{bet_class_attr}">
+      <div class="bet-eyebrow">Buying recommendation</div>
+      <div class="bet-size-text">{bet_data["bet"]}</div>
+      <div class="bet-reason-text">{syn.get("bet_reasoning", "")}</div>
+      {track_html}
+    </div>
+  </div>
+
+  <!-- 5: Override warning -->
+  {override_html}
+
+  <!-- 6: Before you decide -->
+  <div class="skeptic-section" style="margin-top:{('12px' if bet_data.get('bet_override') else '0')};">
     <div class="skeptic-flag">
       <div class="skeptic-header">&#9888; Before you decide</div>
       {syn.get("skepticism_flag", "Apply your own skepticism — Claude synthesis unavailable.")}
     </div>
   </div>
 
-  <!-- 7: What would change this — forward-looking, belongs after evidence -->
+  <!-- 7: What would change this -->
   {what_changes_html}
 
+  <!-- 8: Disagreement -->
   {disagreement_html}
 
 </div>
