@@ -408,55 +408,29 @@ def score_signal(value):
 
 
 # ── Keyword scope validation ───────────────────────────────────────────────────
-_BLOCKED_CATEGORIES = {
-    "shoes", "shoe", "boot", "boots", "heel", "heels", "sandal", "sandals",
-    "sneaker", "sneakers", "footwear", "slipper", "slippers", "loafer", "loafers",
-    "bag", "bags", "handbag", "purse", "wallet", "clutch", "tote", "backpack",
-    "electronics", "phone", "mobile", "laptop", "tablet", "charger", "earphones",
-    "watch", "watches", "jewelry", "jewellery", "necklace", "bracelet", "ring",
-    "furniture", "sofa", "table", "chair", "mattress",
-    "toys", "toy",
-    "makeup", "cosmetics", "skincare", "lipstick", "foundation", "perfume",
-    "menswear", "boys", "kidswear", "kids", "children", "baby",
-    "pet", "dog", "cat",
+# Terms that confirm a keyword is in the kurtis category
+_KURTI_TERMS = {
+    "kurti", "kurtis", "kurta", "anarkali", "angrakha", "sharara",
+    "palazzo", "salwar", "churidar", "coord", "co-ord", "ethnic set",
+    "indo western", "indo-western", "kameez",
 }
 
-_APPAREL_SIGNALS = {
-    "kurti", "kurta", "dress", "top", "blouse", "saree", "sari", "lehenga",
-    "suit", "palazzo", "coord", "anarkali", "dupatta", "churidar", "salwar",
-    "ethnic", "western", "embroidery", "print", "cotton", "silk", "fabric",
-    "womenswear", "women", "ladies", "girl", "female", "fashion", "apparel",
-    "clothing", "wear", "outfit", "set", "collection", "ghagra", "choli",
-    "sharara", "skirt", "tunic", "kaftan", "jumpsuit", "maxi", "midi", "floral",
-    "block", "mirror", "gota", "mukaish", "schiffli", "velvet", "angrakha",
-    "indo", "kameez", "jacket", "cape", "overlay", "kurta",
-}
+_ERROR_MSG = (
+    "This tool is scoped to **India womenswear kurtis** only.\n\n"
+    "Please include a kurti-style term in your keyword — for example:\n"
+    "*mirror embroidery kurti*, *block print co-ord set*, *angrakha kurta*, "
+    "*schiffli cotton kurti*, *velvet palazzo suit*."
+)
 
 
 def validate_keyword(kw):
-    """Returns (status, message): True=valid, False=hard block, None=soft warn."""
+    """Returns (True, None) if valid; (False, message) if blocked."""
     if len(kw.strip()) < 3:
         return False, "Please enter a more specific keyword (at least 3 characters)."
-    words = set(kw.lower().replace("-", " ").split())
-    blocked_hits = words & _BLOCKED_CATEGORIES
-    if blocked_hits:
-        term = next(iter(blocked_hits))
-        return False, (
-            f"This tool is designed for **India womenswear apparel trends** "
-            f"(kurtis, dresses, ethnic wear, western tops, co-ords, etc.).\n\n"
-            f"**'{kw}'** appears to be outside that scope (detected: *{term}*). "
-            f"Please try a womenswear clothing keyword."
-        )
     kw_lower = kw.lower()
-    has_apparel = any(s in kw_lower for s in _APPAREL_SIGNALS)
-    if not has_apparel:
-        return None, (
-            f"**Heads up:** '{kw}' doesn't contain obvious womenswear terms. "
-            f"This tool works best with India womenswear keywords "
-            f"(e.g. 'block print kurti', 'floral co-ord set'). "
-            f"Results may have lower accuracy — apply extra skepticism."
-        )
-    return True, None
+    if any(t in kw_lower for t in _KURTI_TERMS):
+        return True, None
+    return False, _ERROR_MSG
 
 
 def compute_convergence(gt, mkt, soc, news=None):
@@ -1330,7 +1304,7 @@ with col:
     st.markdown("""
 <div class="app-header">
   <h1>📊 Trend Signal Advisor</h1>
-  <p>India womenswear &nbsp;·&nbsp; Value fashion &nbsp;·&nbsp; Early signal intelligence</p>
+  <p>India womenswear kurtis &nbsp;·&nbsp; Value fashion &nbsp;·&nbsp; Early signal intelligence</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -1339,9 +1313,9 @@ with col:
 <div class="hero-section">
   <div class="hero-headline">Is this trend worth a bet?</div>
   <div class="hero-body">
-    For category buyers at value-fashion retailers. By the time a trend appears in your
-    sales data, the buying window is already gone. This tool checks early evidence from
-    4 independent sources — before demand is obvious.
+    For category buyers managing India womenswear kurtis at value-fashion retailers.
+    By the time a trend appears in your sales data, the buying window is already gone.
+    This tool checks early evidence from 4 independent sources — before demand is obvious.
   </div>
   <div class="hero-pills">
     <span class="hero-pill">Google Trends India</span>
@@ -1367,7 +1341,7 @@ with col:
     with st.form("search_form", clear_on_submit=False):
         keyword = st.text_input(
             "",
-            placeholder='e.g. "mirror embroidery kurti", "floral co-ord set"',
+            placeholder='e.g. "mirror embroidery kurti", "schiffli cotton kurti"',
             label_visibility="collapsed",
         )
         analyse = st.form_submit_button("Analyse trend →", use_container_width=True)
