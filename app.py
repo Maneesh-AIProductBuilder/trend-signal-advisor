@@ -1279,7 +1279,7 @@ if "keyword_input"    not in st.session_state: st.session_state.keyword_input   
 # ── Sidebar demo loader ────────────────────────────────────────────────────────
 st.sidebar.markdown("### Try a demo")
 st.sidebar.markdown(
-    '<span style="font-size:12px;color:#9B9590;">See how the tool analyses a known trend — no API calls needed.</span>',
+    '<span style="font-size:12px;color:#9B9590;">See how the tool reasons through a known trend.</span>',
     unsafe_allow_html=True,
 )
 demo_choice = st.sidebar.selectbox(
@@ -1287,6 +1287,7 @@ demo_choice = st.sidebar.selectbox(
     ["— select —", "sharara kurti set", "schiffli cotton kurti",
      "angrakha kurti", "mukaish embroidery kurti", "velvet palazzo suit"],
     label_visibility="collapsed",
+    key="demo_select",
 )
 
 # When user explicitly changes demo selection, that clears any live result
@@ -1370,8 +1371,10 @@ with col:
                 if valid is None:
                     st.warning(msg)
 
-                # Live analysis always clears demo state
-                st.session_state.active_mode = "live"
+                # Live analysis always clears demo state and resets sidebar selector
+                st.session_state.active_mode  = "live"
+                st.session_state.demo_select  = "— select —"
+                st.session_state.prev_demo_choice = "— select —"
 
                 with st.spinner("Fetching signals and synthesising with Claude…"):
                     gt   = get_google_trends_signal(kw)
