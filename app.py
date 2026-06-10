@@ -1364,6 +1364,8 @@ with col:
             valid, msg = validate_keyword(kw)
             if valid is False:
                 st.error(msg)
+                st.session_state.live_result = None
+                st.session_state.active_mode = "none"
             else:
                 if valid is None:
                     st.warning(msg)
