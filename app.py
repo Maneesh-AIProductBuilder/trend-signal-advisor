@@ -407,6 +407,58 @@ def score_signal(value):
     return 0.0
 
 
+# ── Keyword scope validation ───────────────────────────────────────────────────
+_BLOCKED_CATEGORIES = {
+    "shoes", "shoe", "boot", "boots", "heel", "heels", "sandal", "sandals",
+    "sneaker", "sneakers", "footwear", "slipper", "slippers", "loafer", "loafers",
+    "bag", "bags", "handbag", "purse", "wallet", "clutch", "tote", "backpack",
+    "electronics", "phone", "mobile", "laptop", "tablet", "charger", "earphones",
+    "watch", "watches", "jewelry", "jewellery", "necklace", "bracelet", "ring",
+    "furniture", "sofa", "table", "chair", "mattress",
+    "toys", "toy",
+    "makeup", "cosmetics", "skincare", "lipstick", "foundation", "perfume",
+    "menswear", "boys", "kidswear", "kids", "children", "baby",
+    "pet", "dog", "cat",
+}
+
+_APPAREL_SIGNALS = {
+    "kurti", "kurta", "dress", "top", "blouse", "saree", "sari", "lehenga",
+    "suit", "palazzo", "coord", "anarkali", "dupatta", "churidar", "salwar",
+    "ethnic", "western", "embroidery", "print", "cotton", "silk", "fabric",
+    "womenswear", "women", "ladies", "girl", "female", "fashion", "apparel",
+    "clothing", "wear", "outfit", "set", "collection", "ghagra", "choli",
+    "sharara", "skirt", "tunic", "kaftan", "jumpsuit", "maxi", "midi", "floral",
+    "block", "mirror", "gota", "mukaish", "schiffli", "velvet", "angrakha",
+    "indo", "kameez", "jacket", "cape", "overlay", "kurta",
+}
+
+
+def validate_keyword(kw):
+    """Returns (status, message): True=valid, False=hard block, None=soft warn."""
+    if len(kw.strip()) < 3:
+        return False, "Please enter a more specific keyword (at least 3 characters)."
+    words = set(kw.lower().replace("-", " ").split())
+    blocked_hits = words & _BLOCKED_CATEGORIES
+    if blocked_hits:
+        term = next(iter(blocked_hits))
+        return False, (
+            f"This tool is designed for **India womenswear apparel trends** "
+            f"(kurtis, dresses, ethnic wear, western tops, co-ords, etc.).\n\n"
+            f"**'{kw}'** appears to be outside that scope (detected: *{term}*). "
+            f"Please try a womenswear clothing keyword."
+        )
+    kw_lower = kw.lower()
+    has_apparel = any(s in kw_lower for s in _APPAREL_SIGNALS)
+    if not has_apparel:
+        return None, (
+            f"**Heads up:** '{kw}' doesn't contain obvious womenswear terms. "
+            f"This tool works best with India womenswear keywords "
+            f"(e.g. 'block print kurti', 'floral co-ord set'). "
+            f"Results may have lower accuracy — apply extra skepticism."
+        )
+    return True, None
+
+
 def compute_convergence(gt, mkt, soc, news=None):
     trends_raw = score_signal(gt.get("direction", ""))
     market_raw = score_signal(mkt.get("badge_text", ""))
@@ -615,6 +667,83 @@ Please respond with ONLY a JSON object and nothing else:
         return _safe_defaults
 
 
+# ── Score qualitative label ────────────────────────────────────────────────────
+def _score_label(ws):
+    if ws >= 3.5:
+        return "Strong signal"
+    elif ws >= 2.5:
+        return "Moderate signal"
+    elif ws >= 1.5:
+        return "Low confidence"
+    else:
+        return "Weak signal"
+
+
+# ── What would change this recommendation ─────────────────────────────────────
+def _what_changes_text(bet, scores, india_fit):
+    ws  = scores.get("weighted_score", 0) if scores else 0
+    ifp = count_india_fit_positives(india_fit) if india_fit else 0
+    b   = bet.lower()
+
+    if "deeper buy" in b:
+        return (
+            "All demand and India-fit conditions are currently met. "
+            "Monitor Myntra sell-through at 6 weeks — if velocity stays above 50%, this confirms the signal."
+        )
+    elif "trial buy" in b:
+        gap = round(3.5 - ws, 1)
+        return (
+            f"Score is {ws:.1f} / {MAX_SCORE}. A score of 3.5+ with all 4 India-fit checks passing "
+            f"would move this to a Deeper buy (gap: {gap} pts). "
+            f"A rising Google Trends signal or strong new marketplace listings without discounting would close it."
+        )
+    elif "small trial" in b:
+        gap    = round(2.5 - ws, 1)
+        if_gap = max(0, 3 - ifp)
+        msg = f"Score is {ws:.1f} — needs 2.5+ for Trial buy (gap: {gap} pts). "
+        if if_gap > 0:
+            msg += f"Also needs {if_gap} more India-fit positive(s) (currently {ifp}/4). "
+        msg += "Strong marketplace presence with new launches and healthy pricing would move this up."
+        return msg
+    elif "oversupply" in b:
+        return (
+            "Override lifts when: marketplace discount signals drop below threshold AND "
+            "Google Trends shows a rising direction. Check again in 3–4 weeks."
+        )
+    elif "india-fit" in b:
+        return (
+            "Hard stop due to price band or climate mismatch. "
+            "Override lifts only if the trend evolves to fit &#8377;399&#8211;&#8377;1,499 pricing — unlikely for most styles."
+        )
+    elif "buzz without demand" in b:
+        return (
+            "Override lifts when Google Trends or marketplace shows rising demand, not just editorial buzz. "
+            "Watch for Myntra new listings at healthy prices over the next 4 weeks."
+        )
+    elif "monitor" in b:
+        return (
+            f"Score is {ws:.1f} — below the 1.5 threshold for any trial buy. "
+            "If Google Trends rises sustainably over 4 weeks, or Myntra lists fresh inventory without discounting, recheck then."
+        )
+    else:
+        return "No meaningful signal at this time. Recheck if search trends rise or marketplace activity picks up."
+
+
+# ── What to track next ─────────────────────────────────────────────────────────
+def _track_next(bet):
+    b = bet.lower()
+    if "deeper buy" in b:
+        return "Track: Myntra sell-through at 6 weeks &middot; Target &gt;50%"
+    elif "trial buy" in b:
+        return "Track: Myntra sell-through at 4 weeks &middot; Target &gt;35%"
+    elif "small trial" in b:
+        return "Track: Meesho reorder rate at 3 weeks &middot; If &lt;20%, do not reorder"
+    elif "monitor" in b:
+        return "Recheck signals in 3 weeks &middot; Look for rising Trends + fresh marketplace listings"
+    else:
+        return "Recheck if marketplace health improves or search demand rises"
+
+
 # ── India-fit badge HTML helper ────────────────────────────────────────────────
 def _fit_badge(value):
     v = (value or "").lower()
@@ -681,41 +810,63 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
     vf_badge       = _fit_badge(india_fit.get("value_fashion_fit", "Partial"))
     occasion_str   = india_fit.get("occasion_fit", "—")
 
-    # Convergence panel — new weighted layout when scores available, legacy for demos
+    # Score display with qualitative label
+    if scores:
+        ws = scores["weighted_score"]
+        score_display_html = (
+            f'<span style="font-size:26px;font-weight:700;color:#1C1917;line-height:1.1;">{ws:.1f}</span>'
+            f'<span style="font-size:13px;color:#78716C;margin-left:4px;">/ {MAX_SCORE}</span>'
+            f'<span style="font-size:10px;font-weight:600;color:#78716C;'
+            f'background:#E8E3DA;padding:2px 8px;border-radius:10px;margin-left:8px;'
+            f'vertical-align:middle;white-space:nowrap;">{_score_label(ws)}</span>'
+        )
+    else:
+        score_display_html = f'<span style="font-size:22px;font-weight:700;color:#1C1917;">{convergence_display}</span>'
+
+    # Convergence panel
     if scores:
         signal_agreement = syn.get("signal_agreement", syn.get("convergence_summary", ""))
         convergence_panel_html = f"""
     <div class="convergence-panel">
-      <div class="convergence-score">{scores['weighted_score']:.1f}<span class="convergence-denom"> / {MAX_SCORE}</span></div>
-      <div class="convergence-text">
-        <div style="margin-bottom:10px;font-size:13px;line-height:1.5;">{signal_agreement}</div>
-        <div class="convergence-breakdown">
-          <div class="breakdown-row">
-            <span class="breakdown-label">Demand</span>
-            {_inline_badge(gt["badge_class"], gt["badge_text"])}
-            {_inline_badge(mkt["badge_class"], mkt["badge_text"])}
-          </div>
-          <div class="breakdown-row">
-            <span class="breakdown-label">Editorial / Buzz</span>
-            {_inline_badge(soc["badge_class"], soc["badge_text"])}
-            {_inline_badge(_news["badge_class"], _news["badge_text"])}
-          </div>
+      <div style="margin-bottom:8px;">{score_display_html}</div>
+      <div style="font-size:13px;color:#1C1917;line-height:1.5;margin-bottom:10px;">{signal_agreement}</div>
+      <div class="convergence-breakdown">
+        <div class="breakdown-row">
+          <span class="breakdown-label">Demand</span>
+          {_inline_badge(gt["badge_class"], gt["badge_text"])}
+          {_inline_badge(mkt["badge_class"], mkt["badge_text"])}
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Editorial / Buzz</span>
+          {_inline_badge(soc["badge_class"], soc["badge_text"])}
+          {_inline_badge(_news["badge_class"], _news["badge_text"])}
         </div>
       </div>
     </div>"""
     else:
         convergence_panel_html = f"""
     <div class="convergence-panel">
-      <div class="convergence-score">{convergence_display}</div>
-      <div class="convergence-text">{syn.get("convergence_summary", "Signal synthesis unavailable.")}</div>
+      <div style="margin-bottom:6px;">{score_display_html}</div>
+      <div style="font-size:13px;color:#1C1917;">{syn.get("convergence_summary", "Signal synthesis unavailable.")}</div>
     </div>"""
 
-    # Override warning block (only when bet_override is set)
+    # Override warning — with trigger field hint
     override_html = ""
     if bet_data.get("bet_override"):
-        override_html = f'<div class="override-warning">&#9888;&nbsp; {bet_data["bet_override"]}</div>'
+        price_val   = india_fit.get("price_band", "")
+        climate_val = india_fit.get("climate_fit", "").strip()
+        if "Does not fit" in price_val:
+            trigger_hint = ' <span style="font-size:11px;opacity:0.75;">(see Price band below &#8595;)</span>'
+        elif climate_val == "No":
+            trigger_hint = ' <span style="font-size:11px;opacity:0.75;">(see Climate fit below &#8595;)</span>'
+        else:
+            trigger_hint = ""
+        override_html = (
+            f'<div class="override-warning">&#9888;&nbsp; '
+            f'{bet_data["bet_override"]}{trigger_hint}</div>'
+        )
 
-    # Disagreement note (only when Claude flags a conflict)
+    # Disagreement note
     disagreement_note = syn.get("disagreement_note")
     disagreement_html = ""
     if scores and disagreement_note and str(disagreement_note).lower() not in ("null", "none", ""):
@@ -724,6 +875,16 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
     <div class="skeptic-label">What would resolve this disagreement</div>
     <div style="font-size:13px;color:#44403C;line-height:1.6;">{disagreement_note}</div>
   </div>"""
+
+    # "What would change this?" collapsible
+    what_changes_html = f"""
+  <details class="what-changes">
+    <summary class="what-changes-summary">&#9656;&nbsp; What would change this recommendation?</summary>
+    <div class="what-changes-body">{_what_changes_text(bet_data["bet"], scores, india_fit)}</div>
+  </details>"""
+
+    # Track next line inside bet block
+    track_html = f'<div class="track-next">{_track_next(bet_data["bet"])}</div>'
 
     return f"""<!DOCTYPE html>
 <html>
@@ -764,28 +925,48 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
 
   /* Signal rows */
   .signal-row {{
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; justify-content: space-between; align-items: flex-start;
     padding: 10px 0; border-bottom: 1px solid #F5F5F4;
   }}
   .signal-row:last-child {{ border-bottom: none; }}
-  .signal-name {{ font-size: 13px; font-weight: 600; color: #1C1917; margin-bottom: 3px; }}
-  .signal-evidence {{ font-size: 13px; color: #57534E; line-height: 1.45; }}
+  .signal-name {{
+    font-size: 13px; font-weight: 600; color: #1C1917; margin-bottom: 3px;
+    display: flex; align-items: center; gap: 5px;
+  }}
+  .signal-evidence {{ font-size: 12px; color: #57534E; line-height: 1.45; }}
+
+  /* Signal ⓘ tooltip */
+  .tooltip-wrap {{ position: relative; display: inline-block; flex-shrink: 0; }}
+  .tooltip-i {{
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px; background: #D6D3D1; color: #57534E;
+    border-radius: 50%; font-size: 9px; font-weight: 700;
+    cursor: help; font-style: normal; user-select: none;
+  }}
+  .tooltip-box {{
+    display: none; position: absolute; z-index: 999;
+    left: 50%; transform: translateX(-50%); top: 20px;
+    background: #1C1917; color: #E7E5E4;
+    font-size: 11px; font-weight: 400; line-height: 1.55;
+    padding: 8px 10px; border-radius: 6px;
+    width: 230px; pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }}
+  .tooltip-box b {{ color: #FFFFFF; font-weight: 600; }}
+  .tooltip-wrap:hover .tooltip-box {{ display: block; }}
 
   /* Badges */
-  .badge-up   {{ background: #DCFCE7; color: #14532D; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 12px; }}
-  .badge-flat {{ background: #FEF9C3; color: #713F12; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 12px; }}
-  .badge-down {{ background: #FEE2E2; color: #7F1D1D; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 12px; }}
-  .badge-na   {{ background: #F3F4F6; color: #6B7280; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 12px; }}
+  .badge-up   {{ background: #DCFCE7; color: #14532D; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 12px; margin-top: 2px; }}
+  .badge-flat {{ background: #FEF9C3; color: #713F12; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 12px; margin-top: 2px; }}
+  .badge-down {{ background: #FEE2E2; color: #7F1D1D; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 12px; margin-top: 2px; }}
+  .badge-na   {{ background: #F3F4F6; color: #6B7280; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-left: 12px; margin-top: 2px; }}
 
   /* Convergence panel */
   .convergence-panel {{
     background: #F0EDE8; border: 1px solid #E0DDD7; border-radius: 8px;
-    padding: 12px 14px; display: flex; align-items: flex-start; gap: 14px;
+    padding: 12px 14px;
   }}
-  .convergence-score {{ font-size: 28px; font-weight: 700; color: #1C1917; flex-shrink: 0; line-height: 1.1; }}
-  .convergence-denom {{ font-size: 14px; font-weight: 400; color: #78716C; }}
-  .convergence-text  {{ font-size: 14px; color: #1C1917; line-height: 1.6; flex: 1; }}
-  .convergence-breakdown {{ margin-top: 6px; }}
+  .convergence-breakdown {{ margin-top: 4px; }}
   .breakdown-row {{
     display: flex; align-items: center; flex-wrap: wrap; gap: 4px;
     margin-bottom: 5px;
@@ -819,23 +1000,51 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
   .india-badge-partial {{ background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }}
   .india-badge-no      {{ background: #FEE2E2; color: #7F1D1D; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }}
 
-  /* Bet block */
-  .bet-section {{ padding: 0; border-bottom: none; }}
+  /* Bet block — FIRST */
+  .bet-section {{ padding: 0; }}
   .bet-block {{ background: #1C1917; padding: 16px 18px; }}
   .bet-block.deeper      {{ background: #14532D; }}
   .bet-block.small-trial {{ background: #92400E; }}
   .bet-block.monitor     {{ background: #44403C; }}
   .bet-eyebrow {{
-    font-size: 9.5px; font-weight: 700; color: #78716C;
+    font-size: 9.5px; font-weight: 700; color: #A8A29E;
     text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
   }}
   .bet-size-text {{ font-size: 16px; font-weight: 600; color: #F5F0EB; margin-bottom: 6px; }}
-  .bet-reason-text {{ font-size: 13px; color: #D6D3D1; line-height: 1.65; }}
+  .bet-reason-text {{ font-size: 13px; color: #D6D3D1; line-height: 1.65; margin-bottom: 10px; }}
+  .track-next {{
+    font-size: 11px; color: #A8A29E;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 8px; line-height: 1.5;
+  }}
 
-  /* Skepticism flag */
+  /* What would change this */
+  .what-changes {{ border-bottom: 1px solid #EDE9E4; }}
+  .what-changes-summary {{
+    font-size: 12px; font-weight: 500; color: #78716C;
+    padding: 10px 16px; cursor: pointer; list-style: none;
+    display: flex; align-items: center; gap: 4px;
+    user-select: none;
+  }}
+  .what-changes-summary::-webkit-details-marker {{ display: none; }}
+  .what-changes-summary:hover {{ color: #44403C; background: #F7F5F2; }}
+  details[open] .what-changes-summary {{ color: #44403C; }}
+  .what-changes-body {{
+    font-size: 13px; color: #57534E; line-height: 1.65;
+    padding: 0 16px 14px; border-top: 1px solid #F0EDE8;
+    background: #FDFCFB;
+  }}
+
+  /* Skepticism flag — elevated */
+  .skeptic-section {{ padding: 14px 16px 0; border-bottom: 1px solid #EDE9E4; }}
   .skeptic-flag {{
-    background: #FFFBEB; border-top: 1px solid #FDE68A;
-    padding: 14px 18px 16px; font-size: 13px; color: #78350F; line-height: 1.65;
+    background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px;
+    padding: 12px 14px; font-size: 13px; color: #78350F; line-height: 1.65;
+    margin-bottom: 14px;
+  }}
+  .skeptic-header {{
+    font-weight: 700; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #92400E; margin-bottom: 5px;
   }}
   .skeptic-label {{
     font-weight: 700; font-size: 11px; text-transform: uppercase;
@@ -859,37 +1068,89 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
     <span class="result-card-header-kw">{display_kw}</span>
   </div>
 
-  <!-- Section 1: Signal sources -->
-  <div class="result-section">
+  <!-- 1: Buying recommendation FIRST -->
+  <div class="bet-section">
+    <div class="bet-block{bet_class_attr}">
+      <div class="bet-eyebrow">Buying recommendation</div>
+      <div class="bet-size-text">{bet_data["bet"]}</div>
+      <div class="bet-reason-text">{syn.get("bet_reasoning", "")}</div>
+      {track_html}
+    </div>
+  </div>
+
+  <!-- 2: What would change this -->
+  {what_changes_html}
+
+  <!-- Override warning (if present) -->
+  {override_html}
+
+  <!-- 3: Signal sources (with ⓘ tooltips) -->
+  <div class="result-section" style="margin-top:{('12px' if bet_data.get('bet_override') else '0')};">
     <div class="section-eyebrow">Signal sources</div>
 
     <div class="signal-row">
-      <div>
-        <div class="signal-name">Google Trends India</div>
+      <div style="flex:1;min-width:0;">
+        <div class="signal-name">
+          Google Trends India
+          <span class="tooltip-wrap">
+            <i class="tooltip-i">i</i>
+            <span class="tooltip-box">
+              <b>Proves:</b> Direction of search curiosity in India (90 days)<br><br>
+              <b>Cannot prove:</b> Purchase intent — a viral reel can spike this without generating any sales
+            </span>
+          </span>
+        </div>
         <div class="signal-evidence">{gt["evidence"]}</div>
       </div>
       <span class="{gt["badge_class"]}">{gt["badge_text"]}</span>
     </div>
 
     <div class="signal-row">
-      <div>
-        <div class="signal-name">Myntra / Meesho catalog + price health</div>
+      <div style="flex:1;min-width:0;">
+        <div class="signal-name">
+          Myntra / Meesho catalog + price health
+          <span class="tooltip-wrap">
+            <i class="tooltip-i">i</i>
+            <span class="tooltip-box">
+              <b>Proves:</b> Catalog activity and pricing health on India's top fashion marketplaces<br><br>
+              <b>Cannot prove:</b> Actual sell-through — sponsored listings can distort catalog count; discount detection depends on snippet text
+            </span>
+          </span>
+        </div>
         <div class="signal-evidence">{mkt["evidence"]}</div>
       </div>
       <span class="{mkt["badge_class"]}">{mkt["badge_text"]}</span>
     </div>
 
     <div class="signal-row">
-      <div>
-        <div class="signal-name">Web social signal (search-indexed)</div>
+      <div style="flex:1;min-width:0;">
+        <div class="signal-name">
+          Web social signal (search-indexed)
+          <span class="tooltip-wrap">
+            <i class="tooltip-i">i</i>
+            <span class="tooltip-box">
+              <b>Proves:</b> Web-indexed pages mention this trend alongside creators and reels<br><br>
+              <b>Cannot prove:</b> Real Instagram reach — Instagram blocks search engines; this is Google's index of social pages, not direct data
+            </span>
+          </span>
+        </div>
         <div class="signal-evidence">{soc["evidence"]}</div>
       </div>
       <span class="{soc["badge_class"]}">{soc["badge_text"]}</span>
     </div>
 
     <div class="signal-row">
-      <div>
-        <div class="signal-name">News coverage (Google News India)</div>
+      <div style="flex:1;min-width:0;">
+        <div class="signal-name">
+          News coverage (Google News India)
+          <span class="tooltip-wrap">
+            <i class="tooltip-i">i</i>
+            <span class="tooltip-box">
+              <b>Proves:</b> Recent editorial coverage in Indian fashion media (past 2 months)<br><br>
+              <b>Cannot prove:</b> Commercial demand — PR and sponsored content can inflate this signal
+            </span>
+          </span>
+        </div>
         <div class="signal-evidence">{_news["evidence"]}</div>
       </div>
       <span class="{_news["badge_class"]}">{_news["badge_text"]}</span>
@@ -897,17 +1158,15 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
 
   </div>
 
-  <!-- Section 2: Convergence -->
+  <!-- 4: Overall signal strength -->
   <div class="result-section">
-    <div class="section-eyebrow">Signal convergence</div>
+    <div class="section-eyebrow">Overall signal strength</div>
     {convergence_panel_html}
   </div>
 
-  {override_html}
-
-  <!-- Section 3: India-fit check -->
-  <div class="result-section" style="margin-top: {('12px' if bet_data.get('bet_override') else '0')};">
-    <div class="section-eyebrow">India-fit check</div>
+  <!-- 5: India market fit -->
+  <div class="result-section">
+    <div class="section-eyebrow">India market fit</div>
 
     <div class="india-row-stack">
       <div class="india-row-top">
@@ -950,19 +1209,12 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
 
   </div>
 
-  <!-- Section 4: Bet block -->
-  <div class="bet-section">
-    <div class="bet-block{bet_class_attr}">
-      <div class="bet-eyebrow">Buying recommendation</div>
-      <div class="bet-size-text">{bet_data["bet"]}</div>
-      <div class="bet-reason-text">{syn.get("bet_reasoning", "")}</div>
+  <!-- 6: Skepticism flag — elevated, bordered -->
+  <div class="skeptic-section">
+    <div class="skeptic-flag">
+      <div class="skeptic-header">&#9888; Before you decide</div>
+      {syn.get("skepticism_flag", "Apply your own skepticism — Claude synthesis unavailable.")}
     </div>
-  </div>
-
-  <!-- Skepticism flag -->
-  <div class="skeptic-flag">
-    <div class="skeptic-label">&#9888; Skepticism flag</div>
-    {syn.get("skepticism_flag", "Apply your own skepticism — Claude synthesis unavailable.")}
   </div>
 
   {disagreement_html}
@@ -1023,6 +1275,7 @@ st.markdown("""
   .hero-disclaimer { font-size: 11.5px; color: #78716C; font-style: italic; border-left: 2px solid #D1CBC0; padding-left: 10px; line-height: 1.6; }
 
   .input-label { font-size: 10.5px; font-weight: 600; color: #78716C; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .demo-suggestion { font-size: 11.5px; color: #9B9590; margin-top: 6px; line-height: 1.5; }
 
   .stTextInput input { border-radius: 8px; border: 1.5px solid #E8E3DA; background: #FAF9F7; font-size: 14px; padding: 10px 14px; }
   .stTextInput input:focus { border-color: #292524; box-shadow: 0 0 0 2px rgba(41,37,36,0.08); }
@@ -1043,14 +1296,30 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+# ── Session state init ─────────────────────────────────────────────────────────
+if "active_mode"      not in st.session_state: st.session_state.active_mode      = "none"
+if "live_result"      not in st.session_state: st.session_state.live_result      = None
+if "prev_demo_choice" not in st.session_state: st.session_state.prev_demo_choice = "— select —"
+
 # ── Sidebar demo loader ────────────────────────────────────────────────────────
 st.sidebar.markdown("### Try a demo")
+st.sidebar.markdown(
+    '<span style="font-size:12px;color:#9B9590;">See how the tool analyses a known trend — no API calls needed.</span>',
+    unsafe_allow_html=True,
+)
 demo_choice = st.sidebar.selectbox(
     "Load a sample analysis:",
     ["— select —", "sharara kurti set", "schiffli cotton kurti",
      "angrakha kurti", "mukaish embroidery kurti", "velvet palazzo suit"],
     label_visibility="collapsed",
 )
+
+# When user explicitly changes demo selection, that clears any live result
+if demo_choice != st.session_state.prev_demo_choice:
+    if demo_choice != "— select —":
+        st.session_state.active_mode = "demo"
+        st.session_state.live_result = None
+    st.session_state.prev_demo_choice = demo_choice
 
 
 # ── Centred content column ─────────────────────────────────────────────────────
@@ -1093,15 +1362,89 @@ with col:
 """, unsafe_allow_html=True)
 
     st.markdown('<div class="input-label" style="margin-top:16px;">Enter a trend keyword</div>', unsafe_allow_html=True)
-    keyword = st.text_input(
-        "",
-        placeholder='e.g. "mirror embroidery kurti", "coord set womenswear"',
-        label_visibility="collapsed",
-    )
-    analyse = st.button("Analyse trend →", use_container_width=True)
 
-    # ── Demo mode ─────────────────────────────────────────────────────────────
-    if demo_choice != "— select —":
+    # st.form submits on Enter key press — no extra button click needed
+    with st.form("search_form", clear_on_submit=False):
+        keyword = st.text_input(
+            "",
+            placeholder='e.g. "mirror embroidery kurti", "floral co-ord set"',
+            label_visibility="collapsed",
+        )
+        analyse = st.form_submit_button("Analyse trend →", use_container_width=True)
+
+    st.markdown(
+        '<div class="demo-suggestion">Not sure what to try? '
+        'Load an example from the sidebar, or try: <em>sharara kurti set</em> &nbsp;·&nbsp; <em>angrakha kurti</em></div>',
+        unsafe_allow_html=True,
+    )
+
+    # ── Live analysis ──────────────────────────────────────────────────────────
+    if analyse:
+        kw = keyword.strip()
+        if not kw:
+            st.warning("Please enter a trend keyword before analysing.")
+        else:
+            valid, msg = validate_keyword(kw)
+            if valid is False:
+                st.error(msg)
+            else:
+                if valid is None:
+                    st.warning(msg)
+
+                # Live analysis always clears demo state
+                st.session_state.active_mode = "live"
+
+                with st.spinner("Fetching signals and synthesising with Claude…"):
+                    gt   = get_google_trends_signal(kw)
+                    mkt  = get_marketplace_signal(kw)
+                    soc  = get_social_signal(kw)
+                    news = get_news_signal(kw)
+
+                    scores = compute_convergence(gt, mkt, soc, news)
+                    syn    = synthesize_with_claude(kw, gt, mkt, soc, news, scores)
+
+                india_fit           = syn.get("india_fit", {})
+                india_fit_positives = count_india_fit_positives(india_fit)
+                bet_data            = compute_bet(scores, mkt, india_fit, india_fit_positives)
+
+                card = build_card_html(
+                    kw, gt, mkt, soc, syn, scores["display"],
+                    india_fit, bet_data, news, scores,
+                )
+                st.session_state.live_result = {
+                    "card":   card,
+                    "height": estimate_card_height(india_fit, syn, bet_data, scores),
+                    "ts":     gt.get("fetched_at", "N/A"),
+                }
+
+                # Auto-save if keyword matches a demo slot
+                fname = DEMO_FILE_MAP.get(kw) or DEMO_FILE_MAP.get(kw.title())
+                if fname:
+                    os.makedirs(SAMPLE_DIR, exist_ok=True)
+                    payload = {
+                        "keyword": kw,
+                        "analysed_at": datetime.now().strftime("%d %b %Y %H:%M"),
+                        "trends_result": gt,
+                        "marketplace_result": mkt,
+                        "social_result": soc,
+                        "claude_synthesis": syn,
+                        "convergence_total": scores["weighted_score"],
+                        "bet": bet_data["bet"],
+                        "bet_class": bet_data["bet_class"],
+                    }
+                    with open(os.path.join(SAMPLE_DIR, fname), "w", encoding="utf-8") as f:
+                        json.dump(payload, f, ensure_ascii=False, indent=2)
+
+    # ── Render result ──────────────────────────────────────────────────────────
+    if st.session_state.active_mode == "live" and st.session_state.live_result:
+        r = st.session_state.live_result
+        components.html(r["card"], height=r["height"], scrolling=False)
+        st.markdown(
+            f'<div class="signals-timestamp">Signals fetched: {r["ts"]}</div>',
+            unsafe_allow_html=True,
+        )
+
+    elif st.session_state.active_mode == "demo" and demo_choice != "— select —":
         fname = DEMO_FILE_MAP.get(demo_choice)
         fpath = os.path.join(SAMPLE_DIR, fname) if fname else None
         if fpath and os.path.exists(fpath):
@@ -1110,11 +1453,11 @@ with col:
 
             st.info(f"📁 Demo mode — cached · {demo.get('analysed_at', 'unknown')}")
 
-            gt_d   = demo["trends_result"]
-            mkt_d  = demo["marketplace_result"]
-            soc_d  = demo["social_result"]
-            news_d = demo.get("news_result", {})
-            syn_d  = demo["claude_synthesis"]
+            gt_d        = demo["trends_result"]
+            mkt_d       = demo["marketplace_result"]
+            soc_d       = demo["social_result"]
+            news_d      = demo.get("news_result", {})
+            syn_d       = demo["claude_synthesis"]
             india_fit_d = syn_d.get("india_fit", {})
 
             scores_d = {
@@ -1144,80 +1487,4 @@ with col:
                 unsafe_allow_html=True,
             )
         else:
-            st.warning(f"Demo file not found for '{demo_choice}'. Run the analysis once to generate it.")
-
-    # ── Live analysis ──────────────────────────────────────────────────────────
-    if analyse:
-        kw = keyword.strip()
-        if not kw:
-            st.warning("Please enter a trend keyword before analysing.")
-            st.stop()
-
-        with st.spinner("Fetching signals and synthesising with Claude…"):
-            gt   = get_google_trends_signal(kw)
-            mkt  = get_marketplace_signal(kw)
-            soc  = get_social_signal(kw)
-            news = get_news_signal(kw)
-
-            scores = compute_convergence(gt, mkt, soc, news)
-            syn    = synthesize_with_claude(kw, gt, mkt, soc, news, scores)
-
-        india_fit           = syn.get("india_fit", {})
-        india_fit_positives = count_india_fit_positives(india_fit)
-        bet_data            = compute_bet(scores, mkt, india_fit, india_fit_positives)
-
-        card = build_card_html(
-            kw, gt, mkt, soc, syn, scores["display"],
-            india_fit, bet_data, news, scores,
-        )
-        components.html(card, height=estimate_card_height(india_fit, syn, bet_data, scores), scrolling=False)
-
-        ts = gt.get("fetched_at", "N/A")
-        st.markdown(
-            f'<div class="signals-timestamp">Signals fetched: {ts}</div>',
-            unsafe_allow_html=True,
-        )
-
-        # Auto-save to sample_outputs if keyword matches a demo slot
-        fname = DEMO_FILE_MAP.get(kw) or DEMO_FILE_MAP.get(kw.title())
-        if fname:
-            os.makedirs(SAMPLE_DIR, exist_ok=True)
-            payload = {
-                "keyword": kw,
-                "analysed_at": datetime.now().strftime("%d %b %Y %H:%M"),
-                "trends_result": gt,
-                "marketplace_result": mkt,
-                "social_result": soc,
-                "claude_synthesis": syn,
-                "convergence_total": scores["weighted_score"],
-                "bet": bet_data["bet"],
-                "bet_class": bet_data["bet_class"],
-            }
-            with open(os.path.join(SAMPLE_DIR, fname), "w", encoding="utf-8") as f:
-                json.dump(payload, f, ensure_ascii=False, indent=2)
-
-    # ── About these signals expander ───────────────────────────────────────────
-    with st.expander("About these signals ↓", expanded=False):
-        st.markdown("""
-**Google Trends India** — weight 1.5x
-Reflects relative search interest in India over the past 90 days, not absolute volume. A score of 100 means peak popularity in the period — not "100 searches." A flat or falling score does not mean the trend is dead; it may already be mainstream. *When a compound keyword scores near-zero, the tool automatically retries with a broader keyword.*
-
----
-
-**Myntra / Meesho catalog + price health (via Serper)** — weight 1.0x
-Two queries against India's largest fashion marketplaces. Query 1: catalog presence — how many products are listed and whether sellers describe them as new launches. Query 2: price pressure — are those products being discounted heavily, which signals oversupply or slow sell-through. Limitation: Serper returns Google-indexed snippets not live catalog data — discount detection depends on whether discount text appears in titles/snippets.
-
----
-
-**Web social signal (search-indexed)** — weight 0.5x
-Searches Google for pages discussing this trend alongside Instagram, reels, and influencer content. This is NOT direct Instagram data — Instagram blocks search engines. Lower weight because social buzz often leads demand by weeks but can also be empty hype that never converts.
-
----
-
-**Google News India (via Serper)** — weight 0.75x
-Searches Google News for recent articles mentioning this trend in Indian fashion and retail context. Uses the same Serper API as Sources 2 and 3 — no additional key required. Limitation: skews toward English-language media. PR and sponsored content can inflate this signal.
-
----
-
-**Convergence score** is the weighted sum of all 4 signals, max 4.5. The buying recommendation also applies override rules that can block a buy even with a high score — if the marketplace shows oversupply combined with weak search demand, or if India-fit fails hard on price or climate.
-""")
+            st.warning(f"Demo file not found for '{demo_choice}'.")

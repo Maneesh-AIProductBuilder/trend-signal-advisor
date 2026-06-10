@@ -9,17 +9,30 @@ load_dotenv()
 
 # ── Streamlit stub ────────────────────────────────────────────────────────────
 st_stub = types.ModuleType("streamlit")
-st_stub.session_state = {}
+
+class _AttrDict(dict):
+    """Dict that also supports attribute access (mirrors st.session_state)."""
+    def __getattr__(self, k):
+        try: return self[k]
+        except KeyError: raise AttributeError(k)
+    def __setattr__(self, k, v): self[k] = v
+    def __contains__(self, k): return dict.__contains__(self, k)
+
+st_stub.session_state = _AttrDict()
 st_stub.secrets = {}
-st_stub.set_page_config = st_stub.markdown = st_stub.info = st_stub.warning = st_stub.stop = lambda *a, **kw: None
+st_stub.set_page_config = st_stub.markdown = st_stub.info = st_stub.warning = st_stub.stop = st_stub.error = lambda *a, **kw: None
 class FakeCtx:
     def __enter__(self): return self
     def __exit__(self, *a): pass
 st_stub.columns = lambda x: [FakeCtx() for _ in range(len(x) if hasattr(x, "__len__") else x)]
 st_stub.expander = st_stub.spinner = lambda *a, **kw: FakeCtx()
+st_stub.form = lambda *a, **kw: FakeCtx()
 st_stub.text_input = lambda *a, **kw: ""
-st_stub.button = lambda *a, **kw: False
-st_stub.sidebar = types.SimpleNamespace(markdown=lambda *a, **kw: None, selectbox=lambda *a, **kw: "x")
+st_stub.button = st_stub.form_submit_button = lambda *a, **kw: False
+st_stub.sidebar = types.SimpleNamespace(
+    markdown=lambda *a, **kw: None,
+    selectbox=lambda *a, **kw: "— select —",
+)
 sys.modules["streamlit"] = st_stub
 sys.modules["streamlit.components"] = types.ModuleType("streamlit.components")
 sys.modules["streamlit.components.v1"] = types.SimpleNamespace(html=lambda *a, **kw: None)
