@@ -1,0 +1,51 @@
+{
+  "keyword": "Anarkali Kurti",
+  "analysed_at": "10 Jun 2026 13:16",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 29/100 now vs 52/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "Anarkali Kurti",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 13:16",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate",
+    "evidence": "Top results from Myntra/Meesho search · 10 results · keywords: trending",
+    "fetched_at": "10 Jun 2026 13:16"
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Strong",
+    "evidence": "Web-indexed social mentions · 10 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 13:16"
+  },
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Anarkali kurtis are a staple Indian silhouette easily produced at ₹399–₹1,499 with volume margins.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Anarkali's loose, layered cut suits monsoon and festive wear but can feel heavy in peak summer without lightweight fabric selection.",
+      "occasion_fit": "festive, ethnic, casual, wedding-season, Diwali",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Anarkali is deeply rooted in Indian aesthetic and modesty norms, widely accepted across regions and age groups.",
+      "value_fashion_fit": "Yes",
+      "value_fashion_fit_reason": "Anarkali kurtis are high-volume sellers in Meesho and budget chains; customers actively search and repurchase this silhouette."
+    },
+    "convergence_summary": "Anarkali kurtis show strong foundational demand (social and marketplace presence) but search interest has declined 44% over 90 days, signaling either seasonal dip, category saturation, or shift to variant keywords.",
+    "bet_reasoning": "Google Trends decline from 52→29 in six weeks is a material warning despite Myntra/Meesho showing moderate results and social strength; this suggests Anarkali may be entering a consolidation phase rather than growth. Stock cautiously and focus on differentiation (embroidery, fabric weight, color novelty) rather than bulk generic Anarkali bets.",
+    "skepticism_flag": "The 'strong' web-indexed social signal (10 results) is vague and may reflect seasonal festival content noise (Diwali/wedding content) rather than sustained demand trend, especially when Google Trends shows a sharper downward trajectory.",
+    "error": false
+  },
+  "convergence_total": 1.5,
+  "bet": "Trial buy — watch 4-week sell-through",
+  "bet_class": ""
+}

@@ -1,0 +1,51 @@
+{
+  "keyword": "High Low Kurti",
+  "analysed_at": "10 Jun 2026 13:18",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 0/100 now vs 2/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "High Low Kurti",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 13:18",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "moderate",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Moderate",
+    "evidence": "Top results from Myntra/Meesho search · 10 results · keywords: trending",
+    "fetched_at": "10 Jun 2026 13:18"
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Strong",
+    "evidence": "Web-indexed social mentions · 10 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 13:18"
+  },
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "High-low kurtis are structurally simple to manufacture and fit within ₹399–₹1,499 with acceptable margins.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "High-low hemlines expose legs in Indian heat, conflicting with traditional modesty norms and practical cooling needs.",
+      "occasion_fit": "casual, college, semi-formal",
+      "cultural_fit": "Partial",
+      "cultural_fit_reason": "High-low cuts challenge conservative dress codes in tier-2/3 India, though appeal to urban young women is growing.",
+      "value_fashion_fit": "Yes",
+      "value_fashion_fit_reason": "Meesho and similar platforms show steady stocking; value-fashion customers seek trendy silhouettes at low price points."
+    },
+    "convergence_summary": "Google Trends shows flat/declining interest (0/100 now), but marketplace and web-social signals suggest moderate sustained presence, indicating a niche trend with limited mass-market momentum in India.",
+    "bet_reasoning": "Marketplace presence (Myntra/Meesho) and web-social indexing confirm some demand exists, but Google Trends' near-zero current interest is a critical red flag—this is not a growth trend in India right now. Stock conservatively in tier-1 cities only; test small before committing inventory.",
+    "skepticism_flag": "Web-social signal of '10 results' is extremely thin and could reflect a handful of influencers or brand posts rather than genuine organic consumer demand; do not conflate indexed mentions with actual search volume or purchase intent.",
+    "error": false
+  },
+  "convergence_total": 1.5,
+  "bet": "Trial buy — watch 4-week sell-through",
+  "bet_class": ""
+}

@@ -1,0 +1,51 @@
+{
+  "keyword": "cape kurti",
+  "analysed_at": "10 Jun 2026 14:03",
+  "trends_result": {
+    "status": "success",
+    "direction": "flat",
+    "badge_class": "badge-flat",
+    "badge_text": "→ Flat",
+    "evidence": "Interest: 0/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "cape kurti",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 14:03",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "weak",
+    "badge_class": "badge-down",
+    "badge_text": "↓ Weak",
+    "evidence": "Top results from Myntra/Meesho search · 10 results · keywords: none",
+    "fetched_at": "10 Jun 2026 14:03"
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Strong",
+    "evidence": "Web-indexed social mentions · 10 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 14:03"
+  },
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Cape kurtis can be produced within ₹399–₹1,499 range with basic fabric and minimal construction complexity.",
+      "climate_fit": "Partial",
+      "climate_fit_reason": "Capes add fabric bulk unsuitable for Indian heat, though lightweight fabrics and monsoon layering could offset this partially.",
+      "occasion_fit": "casual, ethnic, fusion, Instagram",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Cape kurtis maintain modesty norms while adding contemporary silhouette appeal that aligns with festive and occasion wear.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "Cape construction adds perceived style and visual drama at low cost, but mainstream value-fashion shoppers (Meesho, Vishal Mega Mart) still prioritize comfort and ease-of-wear over novelty silhouettes."
+    },
+    "convergence_summary": "Cape kurtis show online/social interest but zero marketplace traction and zero Google search volume in India, suggesting a niche aspirational trend that has not yet converted to mainstream search or shopping behavior.",
+    "bet_reasoning": "Google Trends flatline (0/100) and Myntra/Meesho absence are strong negative signals—this is not a live commercial trend in value-fashion retail right now. The 10 web-indexed social mentions indicate content exists but has not driven measurable search or purchase intent, meaning early-stage or influencer-driven interest without mass demand.",
+    "skepticism_flag": "The 10 web-indexed social mentions may overrepresent niche fashion blogs or influencer posts that reach small engaged audiences; they do not indicate whether value-fashion customers are actively searching for or buying cape kurtis at scale.",
+    "error": false
+  },
+  "convergence_total": 1.0,
+  "bet": "Small trial only — high uncertainty",
+  "bet_class": "small-trial"
+}

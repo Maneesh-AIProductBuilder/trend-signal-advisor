@@ -1,0 +1,50 @@
+{
+  "keyword": "ethnic coord set",
+  "analysed_at": "10 Jun 2026 13:53",
+  "trends_result": {
+    "status": "success",
+    "direction": "rising",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Rising",
+    "evidence": "Interest: 0/100 now vs 0/100 six weeks ago · Peak: 100/100 · geo: IN · 90 days",
+    "actual_keyword": "ethnic coord set",
+    "broadened": false,
+    "fetched_at": "10 Jun 2026 13:53",
+    "from_cache": false
+  },
+  "marketplace_result": {
+    "status": "success",
+    "strength": "weak",
+    "badge_class": "badge-down",
+    "badge_text": "↓ Weak",
+    "evidence": "Top results from Myntra/Meesho search · 10 results · keywords: none",
+    "fetched_at": "10 Jun 2026 13:53"
+  },
+  "social_result": {
+    "status": "success",
+    "strength": "strong",
+    "badge_class": "badge-up",
+    "badge_text": "↑ Strong",
+    "evidence": "Web-indexed social mentions · 5 results · Note: search results about social content, not direct Instagram data",
+    "fetched_at": "10 Jun 2026 13:53"
+  },
+  "claude_synthesis": {
+    "india_fit": {
+      "price_band": "Fits",
+      "price_band_reason": "Ethnic coord sets align with value-fashion price expectations (INR 399-1499) as they use simpler cuts and cotton/blend fabrics vs premium ethnic wear.",
+      "climate_fit": "Yes",
+      "climate_fit_reason": "Lightweight coord sets in breathable fabrics suit India's warm climate and are practical for casual-to-festive wear.",
+      "occasion_fit": "casual daily wear, festive occasions, semi-formal gatherings, weekend outings",
+      "cultural_fit": "Yes",
+      "cultural_fit_reason": "Ethnic coord sets (kurti + dupatta/pant combos) tap into deep Indian cultural preference for coordinated traditional silhouettes.",
+      "value_fashion_fit": "Partial",
+      "value_fashion_fit_reason": "High-volume sellers (Myntra/Meesho) show weak search traction despite cultural fit, suggesting either saturation or low differentiation in this price band."
+    },
+    "convergence_summary": "Strong cultural and climate alignment, but marketplace search weakness contradicts Google Trends peak, creating uncertainty about actual consumer purchase intent.",
+    "bet_reasoning": "Google Trends shows recent peak (100/100), and web-indexed social mentions (5 results) suggest emerging online conversation. However, the critical red flag: only 10 total results across Myntra/Meesho search indicates either poor indexing, low inventory, or genuinely weak marketplace demand despite the trend signal.",
+    "skepticism_flag": "Google Trends peak may reflect seasonal festive searches (Diwali/wedding season) rather than sustained demand, and the absence of meaningful marketplace results suggests buyers are not converting trend interest into actual purchases in the value-fashion segment."
+  },
+  "convergence_total": 2.0,
+  "bet": "Trial buy — watch 4-week sell-through",
+  "bet_class": ""
+}
