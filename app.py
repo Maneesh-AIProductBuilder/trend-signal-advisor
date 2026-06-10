@@ -1051,10 +1051,7 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
     </div>
   </div>
 
-  <!-- 2: What would change this -->
-  {what_changes_html}
-
-  <!-- Override warning (if present) -->
+  <!-- 2: Override warning directly under recommendation -->
   {override_html}
 
   <!-- 3: Signal sources (with ⓘ tooltips) -->
@@ -1190,6 +1187,9 @@ def build_card_html(display_kw, gt, mkt, soc, syn, convergence_display,
     </div>
   </div>
 
+  <!-- 7: What would change this — forward-looking, belongs after evidence -->
+  {what_changes_html}
+
   {disagreement_html}
 
 </div>
@@ -1273,6 +1273,7 @@ st.markdown("""
 if "active_mode"      not in st.session_state: st.session_state.active_mode      = "none"
 if "live_result"      not in st.session_state: st.session_state.live_result      = None
 if "prev_demo_choice" not in st.session_state: st.session_state.prev_demo_choice = "— select —"
+if "keyword_input"    not in st.session_state: st.session_state.keyword_input    = ""
 
 # ── Sidebar demo loader ────────────────────────────────────────────────────────
 st.sidebar.markdown("### Try a demo")
@@ -1290,8 +1291,9 @@ demo_choice = st.sidebar.selectbox(
 # When user explicitly changes demo selection, that clears any live result
 if demo_choice != st.session_state.prev_demo_choice:
     if demo_choice != "— select —":
-        st.session_state.active_mode = "demo"
-        st.session_state.live_result = None
+        st.session_state.active_mode   = "demo"
+        st.session_state.live_result   = None
+        st.session_state.keyword_input = ""
     st.session_state.prev_demo_choice = demo_choice
 
 
@@ -1342,6 +1344,7 @@ with col:
             "",
             placeholder='e.g. "mirror embroidery kurti", "schiffli cotton kurti"',
             label_visibility="collapsed",
+            key="keyword_input",
         )
         analyse = st.form_submit_button("Analyse trend →", use_container_width=True)
 
