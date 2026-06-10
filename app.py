@@ -3,10 +3,12 @@ import streamlit.components.v1 as components
 from datetime import datetime
 import json
 import os
+import re
 import requests
 from serpapi import GoogleSearch
 from dotenv import load_dotenv
 import anthropic
+from urllib.parse import urlparse
 
 load_dotenv()
 
@@ -143,6 +145,22 @@ def get_google_trends_signal(keyword):
         }
 
 
+def _is_category_url(url):
+    """Returns True if a Myntra/Meesho URL points to a category/listing page (not a product page).
+    Myntra categories use a single path segment: /anarkali-kurtas
+    Meesho categories use /pl/ in the path: /kaftan-kurtis/pl/4rq
+    """
+    try:
+        path_parts = [x for x in urlparse(url).path.strip("/").split("/") if x]
+        if "myntra.com" in url and len(path_parts) == 1:
+            return True
+        if "meesho.com" in url and "/pl/" in url:
+            return True
+    except Exception:
+        pass
+    return False
+
+
 # ── Marketplace signal (Serper — Myntra/Meesho, 2-query: catalog + discounts) ─
 def get_marketplace_signal(keyword):
     cache_key = f"marketplace_{keyword.lower().strip()}"
@@ -194,15 +212,40 @@ def get_marketplace_signal(keyword):
         discount_keywords = ["% off", "flat off", "sale", "clearance", "discount", "upto", "up to", "under ₹"]
         discount_hits = sum(1 for w in discount_keywords if w in disc_text)
 
+        # Snippet-level analysis — better proxies than launch keyword counting
+        # 1. Category page detection: Myntra/Meesho give categories their own short URL;
+        #    product pages have longer multi-segment paths. Category URL = earned a shelf.
+        category_pages = sum(1 for r in catalog_results if _is_category_url(r.get("link", "")))
+
+        # 2. Discount percentages directly from snippets (e.g. "72% OFF", "828 2999 (65% off)")
+        #    60%+ discount on marketplace = liquidation, not healthy sell-through
+        pct_strings = re.findall(r'(\d{2,3})\s*%\s*off', cat_text, re.I)
+        heavy_disc_count = sum(1 for p in pct_strings if int(p) >= 60)
+
+        # 3. Item count when visible in Myntra category snippets (e.g. "2556 items")
+        item_counts = re.findall(r'(\d[\d,]+)\s+(?:items?|results?|kurtis?|products?)', cat_text)
+        max_items = max((int(x.replace(",", "")) for x in item_counts), default=0)
+
         # Interpret combined signal
-        if catalog_count >= 5 and launch_hits >= 2 and discount_hits <= 2:
+        # Rising: has its own category shelf on 2+ occasions AND pricing is healthy
+        if category_pages >= 2 and heavy_disc_count == 0 and discount_hits <= 2:
             strength      = "strong"
             badge_class   = "badge-up"
-            badge_text    = "↑ Strong — new listings, healthy pricing"
+            badge_text    = "↑ Rising — category shelf, healthy pricing"
             market_health = "healthy"
             evidence      = (f"{catalog_count} listings · "
-                             f"{launch_hits} new/launch signals · "
-                             f"minimal discounting detected")
+                             f"{category_pages} category page{'s' if category_pages != 1 else ''} · "
+                             f"no heavy discounting detected")
+        # Oversupply: category presence BUT being liquidated at 60%+ off
+        elif category_pages >= 1 and heavy_disc_count >= 2:
+            strength      = "oversupply"
+            badge_class   = "badge-flat"
+            badge_text    = "⚠ Listed but heavily discounted"
+            market_health = "oversupply"
+            evidence      = (f"{catalog_count} listings · "
+                             f"{heavy_disc_count} snippets with 60%+ discounts · "
+                             f"possible oversupply or slow sell-through")
+        # Oversupply via Query-2 discount signal (keeps existing fallback working)
         elif catalog_count >= 3 and discount_hits >= 4:
             strength      = "oversupply"
             badge_class   = "badge-flat"
@@ -211,13 +254,22 @@ def get_marketplace_signal(keyword):
             evidence      = (f"{catalog_count} listings BUT "
                              f"{discount_hits} discount signals — "
                              f"possible oversupply or slow sell-through")
+        # No category page at all = only individual product-level pages = niche
+        elif category_pages == 0 and catalog_count >= 3:
+            strength      = "weak"
+            badge_class   = "badge-down"
+            badge_text    = "↓ Sparse catalog presence"
+            market_health = "weak"
+            evidence      = (f"{catalog_count} product listings · "
+                             f"no dedicated category page — "
+                             f"niche or emerging, not yet mainstream")
         elif catalog_count >= 3:
             strength      = "moderate"
             badge_class   = "badge-flat"
             badge_text    = "→ Moderate catalog presence"
             market_health = "moderate"
             evidence      = (f"{catalog_count} listings · "
-                             f"{launch_hits} launch signals · "
+                             f"{category_pages} category page{'s' if category_pages != 1 else ''} · "
                              f"{discount_hits} discount signals")
         elif catalog_count >= 1:
             strength      = "weak"
@@ -243,6 +295,9 @@ def get_marketplace_signal(keyword):
             "market_health": market_health,
             "catalog_count": catalog_count,
             "discount_hits": discount_hits,
+            "category_pages": category_pages,
+            "heavy_disc_count": heavy_disc_count,
+            "max_items": max_items,
             "fetched_at": datetime.now().strftime("%d %b %Y %H:%M"),
             "from_cache": False,
         }

@@ -42,7 +42,7 @@ from app import (
     count_india_fit_positives, build_card_html, estimate_card_height,
     WEIGHT_TRENDS, WEIGHT_MARKET, WEIGHT_SOCIAL, WEIGHT_NEWS, MAX_SCORE,
     DEMO_FILE_MAP, SAMPLE_DIR,
-    validate_keyword, _buying_horizon_season,
+    validate_keyword, _buying_horizon_season, _is_category_url,
 )
 
 failures = []
@@ -350,6 +350,23 @@ check("_buying_horizon_season contains month range", any(m in season for m in ["
 gt_c, mkt_c, soc_c, news_c, syn_c, bet_c, sc_c = mk_card_inputs()
 html_leg = build_card_html("test kurti", gt_c, mkt_c, soc_c, syn_c, "2.5 / 4.5", GOOD, bet_c, news_c, sc_c)
 check("build_card_html handles missing bet_logic_tooltip gracefully", len(html_leg) > 2000)
+
+# ─────────────────────────────────────────────────────────────────────────────
+print("\n=== 12. _is_category_url ===")
+# Myntra category pages — single path segment
+check("Myntra category: /anarkali-kurtas", _is_category_url("https://www.myntra.com/anarkali-kurtas"))
+check("Myntra category: /chikankari-kurtas", _is_category_url("https://www.myntra.com/chikankari-kurtas"))
+check("Myntra category: /sequin-kurtis", _is_category_url("https://www.myntra.com/sequin-kurtis"))
+# Meesho category pages — /pl/ in path
+check("Meesho category: /pl/ path", _is_category_url("https://www.meesho.com/kaftan-kurtis/pl/4rq"))
+check("Meesho category: lakhnawi /pl/", _is_category_url("https://www.meesho.com/lakhnawi-chikankari-kurtis/pl/1nvu"))
+# Product pages — should NOT be detected as category
+check("Myntra product page NOT category", not _is_category_url("https://www.myntra.com/kurta-sets/knitstudio/knitstudio-embroidered-kurta/1234"))
+check("Myntra brand product NOT category", not _is_category_url("https://www.myntra.com/biba/biba-anarkali-print-blue/5678"))
+check("Meesho product /p/ NOT category", not _is_category_url("https://www.meesho.com/iridaajaipur-women-blue-bagru/p/4xyzabc"))
+# Edge cases
+check("Empty URL returns False", not _is_category_url(""))
+check("Unrelated URL returns False", not _is_category_url("https://www.amazon.in/anarkali-kurtas"))
 
 print(f"\n{'='*55}")
 print(f"  PASSED: {passed}   FAILED: {len(failures)}")
