@@ -1601,18 +1601,28 @@ with col:
             syn_d       = demo["claude_synthesis"]
             india_fit_d = syn_d.get("india_fit", {})
 
+            # Reconstruct raw scores from stored signal badges so the
+            # score breakdown tooltip in build_card_html has all fields it needs
+            _gt_badge  = gt_d.get("badge_text", gt_d.get("direction", ""))
+            _mkt_badge = mkt_d.get("badge_text", "")
+            _soc_badge = soc_d.get("strength", soc_d.get("badge_text", ""))
+            _news_badge = news_d.get("badge_text", "") if news_d else ""
             scores_d = {
                 "weighted_score": demo.get("weighted_score", 0),
                 "demand_score":   demo.get("demand_score", 0),
                 "buzz_score":     demo.get("buzz_score", 0),
+                "trends_raw":     score_signal(_gt_badge),
+                "market_raw":     score_signal(_mkt_badge),
+                "social_raw":     score_signal(_soc_badge),
+                "news_raw":       score_signal(_news_badge),
                 "display":        f"{demo.get('weighted_score', 0):.1f} / {MAX_SCORE}",
             }
-            bet_d = {
-                "bet":          demo.get("bet", "Monitor only — do not buy yet"),
-                "bet_class":    demo.get("bet_class", "monitor"),
-                "bet_override": demo.get("bet_override"),
-                "desc_prefix":  "",
-            }
+            india_fit_positives_d = count_india_fit_positives(india_fit_d)
+            bet_d = compute_bet(scores_d, mkt_d, india_fit_d, india_fit_positives_d)
+            # Preserve the stored bet/class/override (computed offline) — only borrow the tooltip
+            bet_d["bet"]          = demo.get("bet", bet_d["bet"])
+            bet_d["bet_class"]    = demo.get("bet_class", bet_d["bet_class"])
+            bet_d["bet_override"] = demo.get("bet_override", bet_d["bet_override"])
 
             demo_card = build_card_html(
                 demo["keyword"], gt_d, mkt_d, soc_d, syn_d,
