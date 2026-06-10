@@ -1433,6 +1433,10 @@ with col:
                     with open(os.path.join(SAMPLE_DIR, fname), "w", encoding="utf-8") as f:
                         json.dump(payload, f, ensure_ascii=False, indent=2)
 
+                # Rerun so should_reset_demo is consumed before selectbox renders,
+                # resetting it to "— select —" on this clean pass.
+                st.rerun()
+
     # ── Render result ──────────────────────────────────────────────────────────
     if st.session_state.active_mode == "live" and st.session_state.live_result:
         r = st.session_state.live_result
