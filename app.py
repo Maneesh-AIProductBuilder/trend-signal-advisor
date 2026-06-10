@@ -331,9 +331,11 @@ def get_news_signal(keyword):
         if not SERPER_KEY:
             raise ValueError("SERPER_API_KEY not configured")
 
+        # tbs=qdr:m2 restricts results to the past 2 months — prevents old indexed
+        # articles (2023, 2025 Diwali, etc.) from inflating the news score
         response = requests.post(
             "https://google.serper.dev/news",
-            json={"q": f"{keyword} fashion india", "gl": "in", "num": 10},
+            json={"q": f"{keyword} fashion india", "gl": "in", "num": 10, "tbs": "qdr:m2"},
             headers={"X-API-KEY": SERPER_KEY, "Content-Type": "application/json"},
             timeout=10,
         )
@@ -353,18 +355,19 @@ def get_news_signal(keyword):
         positive_hits = sum(1 for w in positive_words if w in all_text)
         top_headlines = [a.get("title", "") for a in articles[:2] if a.get("title")]
 
-        if article_count >= 3 and positive_hits >= 2:
+        # Lower threshold vs. unfiltered: 2-month window returns fewer articles by design
+        if article_count >= 2 and positive_hits >= 1:
             badge_class, badge_text = "badge-up",   "↑ Active coverage"
         elif article_count >= 1:
             badge_class, badge_text = "badge-flat", "→ Some coverage"
         else:
-            badge_class, badge_text = "badge-na",   "— No news found"
+            badge_class, badge_text = "badge-na",   "— No recent news"
 
         result = {
             "status": "success",
             "badge_class": badge_class,
             "badge_text": badge_text,
-            "evidence": (f"{article_count} news articles · "
+            "evidence": (f"{article_count} articles in past 2 months · "
                          f"{positive_hits} fashion-relevant signals"),
             "article_count": article_count,
             "top_headlines": top_headlines,
