@@ -1271,10 +1271,17 @@ st.markdown("""
 
 
 # ── Session state init ─────────────────────────────────────────────────────────
-if "active_mode"      not in st.session_state: st.session_state.active_mode      = "none"
-if "live_result"      not in st.session_state: st.session_state.live_result      = None
-if "prev_demo_choice" not in st.session_state: st.session_state.prev_demo_choice = "— select —"
-if "keyword_input"    not in st.session_state: st.session_state.keyword_input    = ""
+if "active_mode"       not in st.session_state: st.session_state.active_mode       = "none"
+if "live_result"       not in st.session_state: st.session_state.live_result       = None
+if "prev_demo_choice"  not in st.session_state: st.session_state.prev_demo_choice  = "— select —"
+if "keyword_input"     not in st.session_state: st.session_state.keyword_input     = ""
+if "should_reset_demo" not in st.session_state: st.session_state.should_reset_demo = False
+
+# Reset demo selectbox BEFORE it renders (flag set by live analysis handler below)
+if st.session_state.should_reset_demo:
+    st.session_state["demo_select"]       = "— select —"
+    st.session_state.prev_demo_choice     = "— select —"
+    st.session_state.should_reset_demo    = False
 
 # ── Sidebar demo loader ────────────────────────────────────────────────────────
 st.sidebar.markdown("### Try a demo")
@@ -1371,10 +1378,9 @@ with col:
                 if valid is None:
                     st.warning(msg)
 
-                # Live analysis always clears demo state and resets sidebar selector
-                st.session_state.active_mode  = "live"
-                st.session_state.demo_select  = "— select —"
-                st.session_state.prev_demo_choice = "— select —"
+                # Live analysis clears demo state; flag resets selectbox on next render
+                st.session_state.active_mode       = "live"
+                st.session_state.should_reset_demo = True
 
                 with st.spinner("Fetching signals and synthesising with Claude…"):
                     gt   = get_google_trends_signal(kw)
