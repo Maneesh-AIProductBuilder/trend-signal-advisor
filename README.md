@@ -1,5 +1,4 @@
 # Trend Signal Advisor
-### Fourier Labs FDE Assessment — Problem 01
 
 **Live demo:** https://trend-signal-advisor.streamlit.app  
 **GitHub:** https://github.com/Maneesh-AIProductBuilder/trend-signal-advisor
@@ -259,9 +258,8 @@ Each demo was generated from a live API run and saved as JSON. Score reconstruct
 - Buzz-without-demand override → confirmed requires both social AND news active (buzz_score ≥ 1.0 = minimum 0.5 + 0.75), not just one
 - India-fit hard fail takes priority over oversupply override
 - Generic keyword inputs ("women kurtis", "buy kurtis online") → blocked with a specific error message and style examples
-- Demo selectbox correctly reads from `DEMO_FILE_MAP` (not hardcoded); all five files present and validated
+- Any keyword other than women kurti category is not analyzed and shown an aprropriate error message and nudge to enter what can be analyzed
 
-**Marketplace signal regression:** The original marketplace implementation used launch-keyword counting in snippets, which produced "Moderate" for nearly every query. The fix — category-page URL detection plus 60%+ discount regex — was verified to produce all four distinct states across the five demo keywords before the old demos were replaced.
 
 ### In-app feedback loop
 
@@ -318,6 +316,4 @@ Submissions are appended to `feedback_log.jsonl` with timestamp, keyword, recomm
 
 Three of four signal sources use a single Serper API key. One additional SerpApi key for Google Trends. Claude Haiku for structured synthesis only — all scoring and recommendation logic is deterministic Python.
 
----
 
-*Built for Fourier Labs FDE Assessment · Problem 01 · Trend Buying · June 2026*
