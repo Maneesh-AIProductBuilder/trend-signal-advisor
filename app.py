@@ -1564,7 +1564,7 @@ with col:
 
     st.markdown(
         '<div class="demo-suggestion">Not sure what to try? '
-        'Load an example from the sidebar, or try: <em>sharara kurti set</em> &nbsp;·&nbsp; <em>angrakha kurti</em></div>',
+        'Load an example from the sidebar, or try: <em>mirror work kurti</em> &nbsp;·&nbsp; <em>anarkali kurti</em></div>',
         unsafe_allow_html=True,
     )
 
