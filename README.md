@@ -1,13 +1,13 @@
 # Trend Signal Advisor
 
-**Live demo:** https://maneesh-trendsignal-advisor.streamlit.app/  
+**Live demo:**  https://maneesh-trendsignal-advisor.streamlit.app/  
 ---
 
 ## 1. What I built and how to run it
 
-A value-fashion category buyer commits inventory money to kurti styles 5–8 weeks before demand is visible in sales data. By then, the best supplier slots are gone. Early evidence exists — search intent, marketplace pricing, creator content, editorial coverage — but it is scattered, unreliable, and contradictory. No single signal is enough, and a confident-looking summary would be worse than useless.
+A value-fashion category buyer has to commit inventory money to styles 5–8 weeks before demand is visible in sales data. By the time a trend confirms in sell-through reports, the best supplier slots are gone and competitors have already stocked up. The problem is not a lack of trend data , it's that early evidence is scattered, unreliable, and contradictory. Early evidence exists — search intent, marketplace pricing, creator content, editorial coverage — but it is scattered, unreliable, and contradictory. No single signal is enough, and a confident-looking summary would be worse than useless.
 
-**Trend Signal Advisor** researches four independent signal sources, scores their convergence, runs a deterministic India-fit check, and produces a buying recommendation with every reason for doubt visible. The output explicitly answers the four questions from the brief: *what looks real, what could mislead, what should the buyer do, and what improves next time.*
+**Trend Signal Advisor** is a Streamlit web app that helps a buyer find early evidence, judge it honestly, and arrive at a defensible buying recommendation, not a confident-looking summary. The buyer types a trend keyword.The app researches four independent signal sources, scores their convergence, runs a deterministic India-fit check, and produces a buying recommendation with every reason for doubt visible. The output explicitly answers the four questions: *what looks real, what could mislead, what should the buyer do, and what improves next time.*
 
 ### Run locally
 
