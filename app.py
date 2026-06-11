@@ -1566,7 +1566,7 @@ with col:
     <span class="hero-pill">Google News India</span>
   </div>
   <div class="hero-steps">
-    <div class="hero-step"><div class="hero-step-num">01</div><div class="hero-step-text">Enter a trend keyword</div></div>
+    <div class="hero-step"><div class="hero-step-num">01</div><div class="hero-step-text">Name a kurti style to assess</div></div>
     <div class="hero-step"><div class="hero-step-num">02</div><div class="hero-step-text">4 sources vote independently</div></div>
     <div class="hero-step"><div class="hero-step-num">03</div><div class="hero-step-text">Get a defensible recommendation</div></div>
   </div>
@@ -1577,13 +1577,13 @@ with col:
 </div>
 """, unsafe_allow_html=True)
 
-    st.markdown('<div class="input-label" style="margin-top:16px;">Enter a trend keyword</div>', unsafe_allow_html=True)
+    st.markdown('<div class="input-label" style="margin-top:16px;">Name a kurti style to assess</div>', unsafe_allow_html=True)
 
     # st.form submits on Enter key press — no extra button click needed
     with st.form("search_form", clear_on_submit=False):
         keyword = st.text_input(
             "",
-            placeholder='e.g. "mirror embroidery kurti", "schiffli cotton kurti"',
+            placeholder='e.g. mirror work kurti  ·  anarkali kurti  ·  chikankari kurti',
             label_visibility="collapsed",
             key="keyword_input",
         )
@@ -1763,5 +1763,47 @@ with col:
                 f'<div class="signals-timestamp">Signals fetched: {gt_d.get("fetched_at", "N/A")}</div>',
                 unsafe_allow_html=True,
             )
+
+            # ── Buyer feedback in demo mode ────────────────────────────────────
+            demo_fb_key = f"fb_demo_{demo_choice}"
+            if not st.session_state.get(demo_fb_key, False):
+                st.markdown(
+                    '<p style="font-size:11.5px;color:#9B9590;margin:10px 0 4px;">'
+                    '&#128203; Did you act on this? Helps improve the tool (optional, 10 seconds)</p>',
+                    unsafe_allow_html=True,
+                )
+                with st.form("demo_feedback_form", clear_on_submit=False):
+                    demo_fb_action = st.radio(
+                        "action",
+                        ["Will monitor", "Buying / ordering", "Decided not to buy", "Signal seems wrong"],
+                        horizontal=True,
+                        label_visibility="collapsed",
+                    )
+                    demo_fb_note = st.text_input(
+                        "note",
+                        placeholder="Optional: what did you observe or decide?",
+                        label_visibility="collapsed",
+                    )
+                    demo_fb_submit = st.form_submit_button("Submit feedback →")
+                if demo_fb_submit:
+                    record = {
+                        "ts":             datetime.now().isoformat(),
+                        "keyword":        demo_choice,
+                        "recommendation": demo.get("bet", "unknown"),
+                        "action":         demo_fb_action,
+                        "note":           demo_fb_note.strip(),
+                        "source":         "demo",
+                    }
+                    fb_path = os.path.join(os.path.dirname(__file__), "feedback_log.jsonl")
+                    with open(fb_path, "a", encoding="utf-8") as fh:
+                        fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+                    st.session_state[demo_fb_key] = True
+                    st.rerun()
+            else:
+                st.markdown(
+                    '<p style="font-size:11px;color:#9B9590;text-align:right;margin-top:4px;">'
+                    '&#10003; Feedback recorded &#8212; thank you</p>',
+                    unsafe_allow_html=True,
+                )
         else:
             st.warning(f"Demo file not found for '{demo_choice}'.")
