@@ -1497,8 +1497,7 @@ st.sidebar.markdown(
 )
 demo_choice = st.sidebar.selectbox(
     "Load a sample analysis:",
-    ["— select —", "sharara kurti set", "schiffli cotton kurti",
-     "angrakha kurti", "mukaish embroidery kurti", "velvet palazzo suit"],
+    ["— select —"] + list(DEMO_FILE_MAP.keys()),
     label_visibility="collapsed",
     key="demo_select",
 )
