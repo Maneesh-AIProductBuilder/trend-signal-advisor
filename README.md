@@ -111,6 +111,21 @@ One month (`qdr:m`) misses the full 8-week editorial lead window. Three months (
 
 ## 3. Technical design
 
+### Tech stack
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| UI framework | Streamlit | Web app, session state, sidebar, forms |
+| Google Trends | SerpApi (`google_trends` engine) | Consumer search intent — geo=IN, 90-day timeseries |
+| Marketplace + Social + News | Serper REST API | Organic search, /news endpoint, gl=in |
+| AI synthesis | Anthropic Claude Haiku (`claude-haiku-4-5-20251001`) | Structured India-fit check + qualitative signal reasoning |
+| Scoring + bet sizing | Pure Python (deterministic) | `score_signal()`, `compute_convergence()`, `compute_bet()` |
+| URL parsing | Python `urllib.parse` | Category-page detection on Myntra / Meesho result URLs |
+| Config | `python-dotenv` + `st.secrets` | API keys — local `.env` or Streamlit Cloud secrets |
+| Test suite | Custom Python runner (`run_tests.py`) | 182 unit tests — scoring, overrides, demo schema, URL logic |
+| Demo cache | JSON files (`sample_outputs/`) | Five pre-run analyses; app reviewable with no API keys |
+| Feedback log | Append-only JSONL (`feedback_log.jsonl`) | Buyer action logging for future weight recalibration |
+
 ### Architecture
 
 ```
