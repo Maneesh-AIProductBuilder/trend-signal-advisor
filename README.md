@@ -1,8 +1,6 @@
 # Trend Signal Advisor
 
-**Live demo:** https://trend-signal-advisor.streamlit.app  
-**GitHub:** https://github.com/Maneesh-AIProductBuilder/trend-signal-advisor
-
+**Live demo:** https://maneesh-trendsignal-advisor.streamlit.app/  
 ---
 
 ## 1. What I built and how to run it
