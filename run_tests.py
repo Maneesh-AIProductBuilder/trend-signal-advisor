@@ -43,6 +43,7 @@ from app import (
     WEIGHT_TRENDS, WEIGHT_MARKET, WEIGHT_SOCIAL, WEIGHT_NEWS, MAX_SCORE,
     DEMO_FILE_MAP, SAMPLE_DIR,
     validate_keyword, _buying_horizon_season, _is_category_url,
+    _GENERIC_QUALIFIERS, _BARE_KURTI_NOUNS,
 )
 
 failures = []
@@ -306,19 +307,40 @@ for kw, fname in DEMO_FILE_MAP.items():
 # ─────────────────────────────────────────────────────────────────────────────
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n=== 9. validate_keyword ===")
-for kw in ["mirror embroidery kurti", "schiffli cotton kurti", "block print co-ord set", "angrakha kurta"]:
+# Valid style keywords — must be allowed
+for kw in ["mirror embroidery kurti", "schiffli cotton kurti", "block print co-ord set",
+           "angrakha kurta", "chikankari kurti", "mirror work kurti",
+           "sequin kurti", "anarkali kurti", "cotton kurti", "printed kurti",
+           "bandhani print kurti", "mukaish embroidery kurti"]:
     ok, msg = validate_keyword(kw)
     check(f"validate_keyword valid: {repr(kw[:35])}", ok is True and msg is None, f"ok={ok} msg={msg}")
 
+# Bare single generic words — must be blocked
 for kw in ["kurtis", "kurti", "salwar", "anarkali", "coord"]:
     ok, msg = validate_keyword(kw)
-    check(f"validate_keyword generic-blocked: {repr(kw)}", ok is False and msg, f"ok={ok}")
+    check(f"validate_keyword bare-generic blocked: {repr(kw)}", ok is False and msg, f"ok={ok}")
 
+# Multi-word generic phrases — must be blocked (new logic)
+for kw in ["women kurtis", "women kurti", "ladies kurti", "ladies kurtis",
+           "kurtis for women", "buy kurtis online", "kurtis online",
+           "womens kurti", "womens kurtis", "indian kurti", "india kurtis",
+           "shop kurtis online", "best kurtis for women", "new kurtis"]:
+    ok, msg = validate_keyword(kw)
+    check(f"validate_keyword multi-generic blocked: {repr(kw)}", ok is False and msg, f"ok={ok}")
+
+# Out-of-scope keywords — must be blocked
 for kw in ["canvas shoes", "denim jeans", "saree", "lehenga"]:
     ok, msg = validate_keyword(kw)
-    check(f"validate_keyword out-of-scope: {repr(kw)}", ok is False and msg, f"ok={ok}")
+    check(f"validate_keyword out-of-scope blocked: {repr(kw)}", ok is False and msg, f"ok={ok}")
 
+# Edge cases
 check("validate_keyword too-short blocked", validate_keyword("ab")[0] is False)
+# "cotton kurti" has style content (cotton = fabric) — must be allowed
+check("validate_keyword 'cotton kurti' allowed", validate_keyword("cotton kurti")[0] is True)
+# "printed kurti" has style content — must be allowed
+check("validate_keyword 'printed kurti' allowed", validate_keyword("printed kurti")[0] is True)
+# "anarkali kurti" — style term alongside category term — must be allowed
+check("validate_keyword 'anarkali kurti' allowed", validate_keyword("anarkali kurti")[0] is True)
 
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n=== 10. compute_bet — bet_logic_tooltip field ===")

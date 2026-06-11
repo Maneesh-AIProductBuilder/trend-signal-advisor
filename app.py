@@ -472,28 +472,55 @@ _KURTI_TERMS = {
 
 _GENERIC_ALONE = {"kurti", "kurtis", "kurta", "salwar", "palazzo", "coord", "anarkali"}
 
+# Pure category nouns with no style content — stripped when checking if a
+# multi-word phrase has anything meaningful beyond a bare category word
+_BARE_KURTI_NOUNS = {"kurti", "kurtis", "kurta", "kurtas"}
+
+# Common non-style qualifiers that add no trend signal value
+_GENERIC_QUALIFIERS = {
+    "women", "womens", "woman", "ladies", "lady", "girls", "girl",
+    "buy", "online", "india", "indian", "for", "in", "shop", "shopping",
+    "best", "latest", "new", "top", "cheap", "price", "and", "the", "a",
+}
+
+
 def validate_keyword(kw):
     """Returns (True, None) if valid; (False, message) if blocked."""
     if len(kw.strip()) < 3:
         return False, "Please enter a more specific keyword (at least 3 characters)."
     kw_lower = kw.strip().lower()
-    # Block bare category words — no signal value without a qualifying style term
+
+    # Block bare single category words
     if kw_lower in _GENERIC_ALONE:
         return False, (
             f"**'{kw}'** is too generic to analyse — it's a category name, not a trend.\n\n"
             f"Add a style, fabric, print, or occasion qualifier to make it specific, for example:\n"
-            f"*mirror embroidery kurti* · *block print kurti* · *angrakha kurta* · "
-            f"*schiffli cotton kurti* · *velvet palazzo suit*"
+            f"*mirror work kurti* · *block print kurti* · *chikankari kurti* · "
+            f"*anarkali set* · *sequin kurti*"
         )
+
+    # Block multi-word phrases where every word is either a generic qualifier
+    # or a bare kurti noun — "women kurtis", "buy kurtis online", etc.
+    words = set(kw_lower.split())
+    remaining = words - _GENERIC_QUALIFIERS - _BARE_KURTI_NOUNS
+    if not remaining and any(t in kw_lower for t in _KURTI_TERMS):
+        return False, (
+            f"**'{kw}'** is too generic to analyse — no style signal here.\n\n"
+            f"Add a style, fabric, print, or embroidery qualifier to make it specific, for example:\n"
+            f"*mirror work kurti* · *block print kurti* · *chikankari kurti* · "
+            f"*anarkali set* · *sequin kurti*"
+        )
+
     if any(t in kw_lower for t in _KURTI_TERMS):
         return True, None
+
     return False, (
         f"**'{kw}'** is outside this tool's scope.\n\n"
         f"This tool analyses trends only for **India womenswear kurtis** — "
         f"kurti styles, co-ord sets, angrakha, palazzo suits, and similar ethnic tops.\n\n"
         f"Try a keyword that includes a style term, for example:\n"
-        f"*mirror embroidery kurti* · *angrakha kurta* · "
-        f"*schiffli cotton kurti* · *block print co-ord set* · *velvet palazzo suit*"
+        f"*mirror work kurti* · *chikankari kurti* · "
+        f"*block print co-ord set* · *anarkali kurti* · *sequin kurti*"
     )
 
 
